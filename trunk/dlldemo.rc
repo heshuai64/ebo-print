@@ -1,0 +1,255 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Chinese (P.R.C.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\dlldemo.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""l.chs\\afxres.rc""          // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\dlldemo.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DLLDEMO_DIALOG DIALOGEX 0, 0, 435, 260
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "VC调用BPLADLL演示"
+FONT 9, "宋体"
+BEGIN
+    CONTROL         "串口",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,
+                    36,24,32,10
+    CONTROL         "并口",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,36,47,32,
+                    10
+    CONTROL         "USB",IDC_RADIO6,"Button",BS_AUTORADIOBUTTON,102,24,28,
+                    10
+    CONTROL         "驱动程序",IDC_RADIO7,"Button",BS_AUTORADIOBUTTON,102,47,
+                    48,10
+    COMBOBOX        IDC_COMNAME,52,91,46,54,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBOBAUDRATE,142,91,47,78,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBOADDRESS,52,117,53,78,CBS_DROPDOWNLIST | 
+                    WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "开启端口",IDC_BUTTONOPENPORT,10,228,45,20
+    CONTROL         "指令保存到文件test.txt，不向端口发送",IDC_CHECK1,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,11,207,163,10
+    CONTROL         "水运",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON | WS_GROUP,
+                    256,21,32,10
+    CONTROL         "公路",IDC_RADIO5,"Button",BS_AUTORADIOBUTTON,334,21,32,
+                    10
+    PUSHBUTTON      "打印",IDC_BUTTONPRINT,297,228,45,20,WS_DISABLED
+    PUSHBUTTON      "关闭端口",IDC_BUTTONCLOSEPORT,354,228,45,20,WS_DISABLED
+    CONTROL         "一切正常",IDC_STATICPRINTSTATUS,"Static",
+                    SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | SS_SUNKEN | 
+                    WS_GROUP,117,228,173,19
+    GROUPBOX        "端口选择",IDC_STATIC,5,7,190,55,BS_LEFT
+    LTEXT           "波特率",IDC_STATIC,112,94,25,8
+    LTEXT           "并口地址",IDC_STATIC,14,120,35,8
+    GROUPBOX        "打印票样选择",IDC_STATIC,203,8,217,29,BS_CENTER
+    EDITTEXT        IDC_EDIT1,204,40,218,32,ES_MULTILINE | ES_READONLY | 
+                    ES_WANTRETURN
+    LTEXT           "",IDC_STATIC,205,77,218,141,SS_SUNKEN
+    CONTROL         "",IDC_STATICIMAGE,"Static",SS_BITMAP,214,81,15,14
+    PUSHBUTTON      "打印机状态",IDC_BUTTONSTATUS,67,228,45,20,WS_DISABLED
+    LTEXT           "驱动程序",IDC_STATIC,14,147,35,8
+    EDITTEXT        IDC_DRIVER,52,143,96,14,ES_AUTOHSCROLL
+    GROUPBOX        "端口配置",IDC_STATIC,5,73,191,125
+    LTEXT           "串口名称",IDC_STATIC,14,93,33,8
+    LTEXT           "超时设置",IDC_STATIC,14,174,33,8
+    EDITTEXT        IDC_TIMEOUT,52,171,40,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "（毫秒）",IDC_STATIC,95,174,39,8
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,2,0,1
+ PRODUCTVERSION 1,2,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "dlldemo Microsoft 基础类应用程序\0"
+            VALUE "FileVersion", "1, 2, 0, 1\0"
+            VALUE "InternalName", "dlldemo\0"
+            VALUE "LegalCopyright", "版权所有 (C) 2002\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "dlldemo.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "dlldemo 应用程序\0"
+            VALUE "ProductVersion", "1, 2, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_DLLDEMO_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 5
+        RIGHTMARGIN, 428
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 253
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DLLDEMO_DIALOG DLGINIT
+BEGIN
+    IDC_COMNAME, 0x403, 5, 0
+0x4f43, 0x314d, "\000" 
+    IDC_COMNAME, 0x403, 5, 0
+0x4f43, 0x324d, "\000" 
+    IDC_COMNAME, 0x403, 5, 0
+0x4f43, 0x334d, "\000" 
+    IDC_COMNAME, 0x403, 5, 0
+0x4f43, 0x344d, "\000" 
+    IDC_COMBOBAUDRATE, 0x403, 8, 0
+0x3432, 0x3030, 0x5042, 0x0053, 
+    IDC_COMBOBAUDRATE, 0x403, 8, 0
+0x3639, 0x3030, 0x5042, 0x0053, 
+    IDC_COMBOBAUDRATE, 0x403, 9, 0
+0x3931, 0x3032, 0x4230, 0x5350, "\000" 
+    IDC_COMBOBAUDRATE, 0x403, 9, 0
+0x3833, 0x3034, 0x4230, 0x5350, "\000" 
+    IDC_COMBOBAUDRATE, 0x403, 9, 0
+0x3635, 0x3030, 0x4230, 0x5350, "\000" 
+    IDC_COMBOBAUDRATE, 0x403, 9, 0
+0x3735, 0x3036, 0x4230, 0x5350, "\000" 
+    IDC_COMBOBAUDRATE, 0x403, 10, 0
+0x3131, 0x3235, 0x3030, 0x5042, 0x0053, 
+    IDC_COMBOADDRESS, 0x403, 10, 0
+0x3733, 0x4838, 0x332d, 0x4637, 0x0048, 
+    IDC_COMBOADDRESS, 0x403, 10, 0
+0x3732, 0x4838, 0x322d, 0x4637, 0x0048, 
+    0
+END
+
+#endif    // Chinese (P.R.C.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE 4, 2
+#pragma code_page(936)
+#endif //_WIN32
+#include "res\dlldemo.rc2"  // non-Microsoft Visual C++ edited resources
+#include "l.chs\afxres.rc"          // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
