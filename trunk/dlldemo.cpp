@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include "HTTPSocket.h"
 #include "dlldemo.h"
 #include "dlldemoDlg.h"
 
@@ -41,13 +42,13 @@ CDlldemoApp theApp;
 
 BOOL CDlldemoApp::InitInstance()
 {
-	/*
+	
 	if (!AfxSocketInit())
 	{
 		AfxMessageBox("");
 		return FALSE;
 	}
-	*/
+	
 	AfxEnableControlContainer();
 
 	// Standard initialization

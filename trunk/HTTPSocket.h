@@ -1,13 +1,15 @@
-class HTTPSocket : public CAsyncSocket
+class HTTPSocket : public CSocket
 {
 public:
 	CDialog*	m_pDlg;
 public:
-	CString URL;
+	CString Host;
 	int Port;
 	TCHAR	m_szError[255];
 
 	HTTPSocket(CDialog*, CString, int);
+	virtual ~HTTPSocket();
+
 	void Get(CString);
 	void Post();
 

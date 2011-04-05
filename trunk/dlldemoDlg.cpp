@@ -285,16 +285,14 @@ void CDlldemoDlg::OnButtonopenport()
 {
 	//eBayBOService* ebos = new eBayBOService();
 	//ebos->getShippingAddress();
-	if((m_pHTTPSock = new HTTPSocket(this, "rich2010.3322.org", 8888)) == NULL)
-	{
-		AfxMessageBox ("Failed to allocate client socket! Close and restart app.");
-		return;
-	}
 	//CString StrMessage = "GET / HTTP/1.1\r\n\r\n";
 	//int sent;
 	//sent = m_pHTTPSock->Send(StrMessage, StrMessage.GetLength());
-	
-	m_pHTTPSock->Get("/eBayBO/");
+	if((m_pHTTPSock = new HTTPSocket(this, "rich2010.3322.org", 8888)) == NULL)
+	{
+		AfxMessageBox ("Failed to allocate client socket! Close and restart app.");
+	}
+	m_pHTTPSock->Get("/eBayBO/login.html");
 	//MessageBox("test content", "test", MB_APPLMODAL);
 
 	int comnameindex;
