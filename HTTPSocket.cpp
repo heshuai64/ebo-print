@@ -3,10 +3,10 @@
 #include "dlldemo.h"
 #include "dlldemoDlg.h"
 
-HTTPSocket::HTTPSocket(CDialog* pDlg, CString strURL, int nport)
+HTTPSocket::HTTPSocket(CDialog* pDlg, CString strHost, int nport)
 {
 	m_pDlg = pDlg;
-	URL = strURL;
+	Host = strHost;
 	Port = nport;
 
 	if (!HTTPSocket::Create())
@@ -16,35 +16,54 @@ HTTPSocket::HTTPSocket(CDialog* pDlg, CString strURL, int nport)
 		return;
 	}
 
-	HTTPSocket::Connect(URL, Port);
+	if (!HTTPSocket::Connect(Host, Port))
+	{
+		wsprintf(m_szError, "Failed to connect: %d.", HTTPSocket::GetLastError());
+		AfxMessageBox (m_szError);
+		HTTPSocket::Close();
+		return;
+	}
 }
+
+HTTPSocket::~HTTPSocket()
+{
+}
+
 
 void HTTPSocket::Get(CString StrService)
 {
-	CString StrMessage = "GET " + StrService + " HTTP/1.1\r\n\r\n";
-	int sent;
-	sent = HTTPSocket::Send(StrMessage, StrMessage.GetLength());
+	CString StrMessage = "GET " + StrService + " HTTP/1.1\r\n";
+	StrMessage += "Host: rich2010.3322.org:8888\r\n\r\n";
+	//int sent;
+	AfxMessageBox(StrMessage);
+	if (HTTPSocket::Send(StrMessage, StrMessage.GetLength()) == SOCKET_ERROR)
+	{
+		wsprintf(m_szError, "Failed to send on client socket: %d", HTTPSocket::GetLastError());
+		AfxMessageBox (m_szError);
+		HTTPSocket::Close();
+		return;
+	}
 }
 
 void HTTPSocket::OnAccept(int nErrorCode) 
 {
-	CAsyncSocket::OnAccept(nErrorCode);
+	CSocket::OnAccept(nErrorCode);
 }
 
 void HTTPSocket::OnClose(int nErrorCode) 
 {
 	((CDlldemoDlg*)m_pDlg)->m_pHTTPSock = NULL;
-	CAsyncSocket::OnClose(nErrorCode);
+	CSocket::OnClose(nErrorCode);
 }
 
 void HTTPSocket::OnConnect(int nErrorCode) 
 {
-	CAsyncSocket::OnConnect(nErrorCode);
+	CSocket::OnConnect(nErrorCode);
 }
 
 void HTTPSocket::OnOutOfBandData(int nErrorCode) 
 {
-	CAsyncSocket::OnOutOfBandData(nErrorCode);
+	CSocket::OnOutOfBandData(nErrorCode);
 }
 
 void HTTPSocket::OnReceive(int nErrorCode) 
@@ -56,22 +75,22 @@ void HTTPSocket::OnReceive(int nErrorCode)
 	iRcvd = HTTPSocket::Receive(pBuf, iBuf);
 	MessageBox(NULL, pBuf, "test", MB_APPLMODAL);
 
-	CAsyncSocket::OnReceive(nErrorCode);
+	CSocket::OnReceive(nErrorCode);
 }
 
 void HTTPSocket::OnSend(int nErrorCode) 
 {
-	CAsyncSocket::OnSend(nErrorCode);
+	CSocket::OnSend(nErrorCode);
 }
 
 int HTTPSocket::Receive(void* lpBuf, int nBufLen, int nFlags) 
 {
-	return CAsyncSocket::Receive(lpBuf, nBufLen, nFlags);
+	return CSocket::Receive(lpBuf, nBufLen, nFlags);
 }
 
 int HTTPSocket::Send(const void* lpBuf, int nBufLen, int nFlags) 
 {
-	return CAsyncSocket::Send(lpBuf, nBufLen, nFlags);
+	return CSocket::Send(lpBuf, nBufLen, nFlags);
 }
 
 void HTTPSocket::Post()
