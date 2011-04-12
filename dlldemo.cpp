@@ -2,9 +2,11 @@
 //
 
 #include "stdafx.h"
+#include "eBayBOService.h"
 #include "HTTPSocket.h"
 #include "dlldemo.h"
 #include "dlldemoDlg.h"
+#include "LoginDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -35,6 +35,8 @@ public:
 	int		m_label;
 	CString	m_drstr;
 	int		m_time;
+	CTime   m_date;
+	CString m_sku;
 	HTTPSocket* m_pHTTPSock;
 	//}}AFX_DATA
 
@@ -65,6 +67,7 @@ protected:
 	afx_msg void OnButtonstatus();
 	afx_msg void OnRadio6();
 	afx_msg void OnRadio7();
+	afx_msg void OnLogin();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

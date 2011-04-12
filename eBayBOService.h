@@ -13,12 +13,11 @@ struct ShippingAddress {
 class eBayBOService
 {
 public:
-	eBayBOService();
+	eBayBOService(CString, CString);
 
-	char* ActionPath;
-	char* Service;
-	void setActionPath(char*);
-	void setService(char*);
-	ShippingAddress* getShippingAddress();
+	CString ActionPath;
+	CString Service;
+	void getShippingAddressBySku(CString);
+	ShippingAddress* getShippingAddress(CString);
 };
 
