@@ -1,13 +1,13 @@
 class HTTPSocket : public CSocket
 {
 public:
-	CDialog*	m_pDlg;
+	eBayBOService*	pService;
 public:
 	CString Host;
 	int Port;
 	TCHAR	m_szError[255];
 
-	HTTPSocket(CDialog*, CString, int);
+	HTTPSocket(eBayBOService*, CString, int);
 	virtual ~HTTPSocket();
 
 	void Get(CString);

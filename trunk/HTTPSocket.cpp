@@ -1,11 +1,12 @@
 #include "stdafx.h"
+#include "eBayBOService.h"
 #include "HTTPSocket.h"
-#include "dlldemo.h"
-#include "dlldemoDlg.h"
+//#include "dlldemo.h"
+//#include "dlldemoDlg.h"
 
-HTTPSocket::HTTPSocket(CDialog* pDlg, CString strHost, int nport)
+HTTPSocket::HTTPSocket(eBayBOService* service, CString strHost, int nport)
 {
-	m_pDlg = pDlg;
+	pService = service;
 	Host = strHost;
 	Port = nport;
 
@@ -32,8 +33,10 @@ HTTPSocket::~HTTPSocket()
 
 void HTTPSocket::Get(CString StrService)
 {
+	char StrPort[5];
+	_itoa(Port, StrPort, 10);
 	CString StrMessage = "GET " + StrService + " HTTP/1.1\r\n";
-	StrMessage += "Host: rich2010.3322.org:8888\r\n\r\n";
+	StrMessage += CString("Host: ") + Host + ":" + StrPort + "\r\n\r\n";
 	//int sent;
 	AfxMessageBox(StrMessage);
 	if (HTTPSocket::Send(StrMessage, StrMessage.GetLength()) == SOCKET_ERROR)
@@ -52,7 +55,7 @@ void HTTPSocket::OnAccept(int nErrorCode)
 
 void HTTPSocket::OnClose(int nErrorCode) 
 {
-	((CDlldemoDlg*)m_pDlg)->m_pHTTPSock = NULL;
+	//((CDlldemoDlg*)m_pDlg)->m_pHTTPSock = NULL;
 	CSocket::OnClose(nErrorCode);
 }
 
@@ -73,7 +76,7 @@ void HTTPSocket::OnReceive(int nErrorCode)
 	int iRcvd;
 
 	iRcvd = HTTPSocket::Receive(pBuf, iBuf);
-	MessageBox(NULL, pBuf, "test", MB_APPLMODAL);
+	pService->getShippingAddress(pBuf);
 
 	CSocket::OnReceive(nErrorCode);
 }

@@ -2,11 +2,12 @@
 //
 
 #include "stdafx.h"
+#include "eBayBOService.h"
 #include "HTTPSocket.h"
 #include "dlldemo.h"  
 #include "dlldemoDlg.h"
 #include "Print.h"
-//#include "eBayBOService.h"
+#include "LoginDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -104,6 +105,8 @@ void CDlldemoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Radio(pDX, IDC_RADIO4, m_label);
 	DDX_Text(pDX, IDC_DRIVER, m_drstr);
 	DDX_Text(pDX, IDC_TIMEOUT, m_time);
+	DDX_Text(pDX, IDC_EDIT3, m_sku);
+	DDX_DateTimeCtrl(pDX, IDC_DATETIMEPICKER1, m_date);
 	//}}AFX_DATA_MAP
 }
 
@@ -122,6 +125,7 @@ BEGIN_MESSAGE_MAP(CDlldemoDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTONSTATUS, OnButtonstatus)
 	ON_BN_CLICKED(IDC_RADIO6, OnRadio6)
 	ON_BN_CLICKED(IDC_RADIO7, OnRadio7)
+	ON_COMMAND(IDM_LOGIN, OnLogin)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -150,6 +154,7 @@ BOOL CDlldemoDlg::OnInitDialog()
 	m_comname.SetCurSel(0);
 	m_drstr = "BTP-2300T2(S)";
 	m_time = 1000;
+	m_date = CTime::GetCurrentTime();
 	OnRadio4();
 	LoadDll();
 	
@@ -201,18 +206,22 @@ void CDlldemoDlg::OnRadio4()
 {
     SetDlgItemText(IDC_EDIT1,"选用TRUETYPE字体打印，数据量较大，请使用并口或USB口通讯。");	
 	HBITMAP m_hbmp;
-	m_hbmp = (HBITMAP)LoadImage(NULL,"WaterWay.bmp",IMAGE_BITMAP,300,200,LR_DEFAULTSIZE|LR_SHARED|LR_LOADFROMFILE);
+	m_hbmp = (HBITMAP)LoadImage(NULL,"Address.bmp",IMAGE_BITMAP,509,145,LR_DEFAULTSIZE|LR_SHARED|LR_LOADFROMFILE);
 	m_ctrlimage.SetBitmap(m_hbmp);
 	m_label = 0;
 }
 
 void CDlldemoDlg::OnRadio5() 
 {
+	UpdateData(TRUE);
     SetDlgItemText(IDC_EDIT1,"选用内部字体打印，内部支持的ASCII码字体共23种，并可以将外部字库下载到FLASH中作为内部字体使用。");
 	HBITMAP m_hbmp;
-	m_hbmp = (HBITMAP)LoadImage(NULL,"freeway.bmp",IMAGE_BITMAP,300,200,LR_DEFAULTSIZE|LR_SHARED|LR_LOADFROMFILE);
+	m_hbmp = (HBITMAP)LoadImage(NULL,"WaterWay.bmp",IMAGE_BITMAP,300,200,LR_DEFAULTSIZE|LR_SHARED|LR_LOADFROMFILE);
 	m_ctrlimage.SetBitmap(m_hbmp);
 	m_label = 1;
+	
+	//MessageBox(m_date.Format("%Y-%m-%d"), "test", MB_APPLMODAL);
+	MessageBox(m_sku, "test", MB_APPLMODAL);
 }
 
 void CDlldemoDlg::OnCheck1() 
@@ -283,16 +292,18 @@ void CDlldemoDlg::OnRadio1()
 
 void CDlldemoDlg::OnButtonopenport() 
 {
-	//eBayBOService* ebos = new eBayBOService();
-	//ebos->getShippingAddress();
+	eBayBOService* ebos = new eBayBOService("/eBayBO/service.php?action=", "getShippingAddressBySku");
+	ebos->getShippingAddressBySku("&sku=HG00009");
 	//CString StrMessage = "GET / HTTP/1.1\r\n\r\n";
 	//int sent;
 	//sent = m_pHTTPSock->Send(StrMessage, StrMessage.GetLength());
+	/*
 	if((m_pHTTPSock = new HTTPSocket(this, "rich2010.3322.org", 8888)) == NULL)
 	{
 		AfxMessageBox ("Failed to allocate client socket! Close and restart app.");
 	}
 	m_pHTTPSock->Get("/eBayBO/login.html");
+	*/
 	//MessageBox("test content", "test", MB_APPLMODAL);
 
 	int comnameindex;
@@ -856,4 +867,13 @@ void CDlldemoDlg::OnRadio7()
 	m_buttoncloseport.EnableWindow(FALSE);
 	m_buttonprint.EnableWindow(FALSE);
 	m_buttonstatus.EnableWindow(FALSE);
+}
+
+void CDlldemoDlg::OnLogin() 
+{
+	// TODO: Add your command handler code here
+	//MessageBox("xx", "test", MB_APPLMODAL);
+	CLoginDlg dlg = new CLoginDlg(this->GetParent());
+	int nResponse = dlg.DoModal();
+
 }
