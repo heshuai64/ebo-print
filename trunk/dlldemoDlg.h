@@ -16,21 +16,14 @@ class CDlldemoDlg : public CDialog
 // Construction
 public:
 	CDlldemoDlg(CWnd* pParent = NULL);	// standard constructor
-
+	BOOL CDlldemoDlg::PreTranslateMessage(MSG* pMsg);
 // Dialog Data
 	//{{AFX_DATA(CDlldemoDlg)
 	enum { IDD = IDD_DLLDEMO_DIALOG };
-	CEdit	m_timeout;
-	CEdit	m_driver;
-	CComboBox	m_comname;
-	CButton	m_buttonstatus;
-	CButton	m_buttonprint;
+	CEdit	m_cesku;
 	CButton	m_buttonopenport;
 	CButton	m_buttoncloseport;
 	CButton	m_ctrlcheck;
-	CStatic	m_ctrlimage;
-	CComboBox	m_ctrladdress;
-	CComboBox	m_ctrlbaudrate;
 	int		m_port;
 	int		m_label;
 	CString	m_drstr;
@@ -38,6 +31,8 @@ public:
 	CTime   m_date;
 	CString m_sku;
 	HTTPSocket* m_pHTTPSock;
+	CLoginDlg* m_pLogindlg;
+	CSKUBarcodeDlg* m_pSkuBarcodedlg;
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
@@ -49,25 +44,18 @@ public:
 // Implementation
 protected:
 	HICON m_hIcon;
-	BOOL PrintWaterWay();
-	BOOL PrintFreeWay();
 	// Generated message map functions
 	//{{AFX_MSG(CDlldemoDlg)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	afx_msg void OnRadio4();
-	afx_msg void OnRadio5();
 	afx_msg void OnCheck1();
-	afx_msg void OnRadio3();
-	afx_msg void OnRadio1();
 	afx_msg void OnButtonopenport();
 	afx_msg void OnButtoncloseport();
-	afx_msg void OnButtonprint();
-	afx_msg void OnButtonstatus();
-	afx_msg void OnRadio6();
-	afx_msg void OnRadio7();
 	afx_msg void OnLogin();
+	afx_msg void OnButtonPrintAddress();
+	afx_msg void OnChangeSku();
+	afx_msg void OnMenuSkuBarcode();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

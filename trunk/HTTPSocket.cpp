@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "eBayBOService.h"
 #include "HTTPSocket.h"
-//#include "dlldemo.h"
-//#include "dlldemoDlg.h"
 
 HTTPSocket::HTTPSocket(eBayBOService* service, CString strHost, int nport)
 {
@@ -37,7 +35,6 @@ void HTTPSocket::Get(CString StrService)
 	_itoa(Port, StrPort, 10);
 	CString StrMessage = "GET " + StrService + " HTTP/1.1\r\n";
 	StrMessage += CString("Host: ") + Host + ":" + StrPort + "\r\n\r\n";
-	//int sent;
 	AfxMessageBox(StrMessage);
 	if (HTTPSocket::Send(StrMessage, StrMessage.GetLength()) == SOCKET_ERROR)
 	{
@@ -71,13 +68,12 @@ void HTTPSocket::OnOutOfBandData(int nErrorCode)
 
 void HTTPSocket::OnReceive(int nErrorCode) 
 {
-	char *pBuf = new char[1025];
-	int iBuf = 1024;
+	char *pBuf = new char[2049];
+	int iBuf = 2048;
 	int iRcvd;
 
 	iRcvd = HTTPSocket::Receive(pBuf, iBuf);
-	pService->getShippingAddress(pBuf);
-
+	pService->processReceive(pBuf);
 	CSocket::OnReceive(nErrorCode);
 }
 

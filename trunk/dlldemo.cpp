@@ -5,8 +5,9 @@
 #include "eBayBOService.h"
 #include "HTTPSocket.h"
 #include "dlldemo.h"
-#include "dlldemoDlg.h"
 #include "LoginDlg.h"
+#include "SKUBarcodeDlg.h"
+#include "dlldemoDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -77,7 +78,7 @@ BOOL CDlldemoApp::InitInstance()
 		// TODO: Place code here to handle when the dialog is
 		//  dismissed with Cancel
 	}
-
+	
 	// Since the dialog has been closed, return FALSE so that we exit the
 	//  application, rather than start the application's message pump.
 	return FALSE;
