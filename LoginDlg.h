@@ -19,6 +19,9 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CLoginDlg)
 	enum { IDD = IDD_PROPPAGE_SMALL };
+	CString	m_user;
+	CString	m_password;
+	int i_r;
 		// NOTE: the ClassWizard will add data members here
 	//}}AFX_DATA
 
@@ -35,7 +38,8 @@ protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CLoginDlg)
-		// NOTE: the ClassWizard will add member functions here
+	afx_msg void OnLogin();
+	afx_msg void OnLoginClose();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

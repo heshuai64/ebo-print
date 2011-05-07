@@ -6,6 +6,7 @@
 #define IDR_MAINFRAME                   128
 #define IDR_MENU1                       134
 #define IDD_PROPPAGE_SMALL              136
+#define IDD_SKU_BARCODE                 137
 #define IDC_STATICPRINTSTATUS           1000
 #define IDC_RADIO1                      1001
 #define IDC_RADIO2                      1002
@@ -34,15 +35,23 @@
 #define IDC_EDIT3                       1033
 #define IDC_EDIT2                       1034
 #define IDC_BUTTON2                     1035
+#define IDC_SKU                         1036
+#define IDC_GET_SKU_INFO                1040
+#define IDC_SKU_BARCODE_PRINT           1041
+#define IDC_BARCODE_SKU                 1042
+#define IDC_PRINT_NUM                   1043
+#define IDC_SKU_TITLE                   1044
+#define IDC_SKU_STOCK                   1045
 #define IDM_LOGIN                       32771
+#define IDM_SKU_BARCODE                 32774
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        137
-#define _APS_NEXT_COMMAND_VALUE         32772
-#define _APS_NEXT_CONTROL_VALUE         1036
+#define _APS_NEXT_RESOURCE_VALUE        138
+#define _APS_NEXT_COMMAND_VALUE         32775
+#define _APS_NEXT_CONTROL_VALUE         1046
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

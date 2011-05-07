@@ -128,6 +128,10 @@ SOURCE=.\Print.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SKUBarcodeDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -170,6 +174,10 @@ SOURCE=.\Print.h
 # Begin Source File
 
 SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SKUBarcodeDlg.h
 # End Source File
 # Begin Source File
 
