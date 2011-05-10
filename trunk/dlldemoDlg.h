@@ -16,13 +16,15 @@ class CDlldemoDlg : public CDialog
 // Construction
 public:
 	CDlldemoDlg(CWnd* pParent = NULL);	// standard constructor
-	BOOL CDlldemoDlg::PreTranslateMessage(MSG* pMsg);
+	BOOL PreTranslateMessage(MSG* pMsg);
+	void SetCurrencyUser(CString);
 // Dialog Data
 	//{{AFX_DATA(CDlldemoDlg)
 	enum { IDD = IDD_DLLDEMO_DIALOG };
 	CEdit	m_cesku;
 	CButton	m_buttonopenport;
 	CButton	m_buttoncloseport;
+	CButton	m_buttonprintaddress;
 	CButton	m_ctrlcheck;
 	int		m_port;
 	int		m_label;
@@ -30,6 +32,7 @@ public:
 	int		m_time;
 	CTime   m_date;
 	CString m_sku;
+	CString m_user;
 	HTTPSocket* m_pHTTPSock;
 	CLoginDlg* m_pLogindlg;
 	CSKUBarcodeDlg* m_pSkuBarcodedlg;

@@ -42,6 +42,8 @@
 #define IDC_PRINT_NUM                   1043
 #define IDC_SKU_TITLE                   1044
 #define IDC_SKU_STOCK                   1045
+#define IDC_CURRENCY_USER               1046
+#define IDC_BUTTONPRINTADDRESS          1047
 #define IDM_LOGIN                       32771
 #define IDM_SKU_BARCODE                 32774
 
@@ -51,7 +53,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1046
+#define _APS_NEXT_CONTROL_VALUE         1048
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

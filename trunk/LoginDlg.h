@@ -14,8 +14,10 @@ class CLoginDlg : public CDialog
 {
 // Construction
 public:
+	CDialog* m_pDlg;
 	CLoginDlg(CWnd* pParent = NULL);   // standard constructor
-
+	void SetParentDlg(CDialog *pDlg);
+	void SetCurrencyUser(CString);
 // Dialog Data
 	//{{AFX_DATA(CLoginDlg)
 	enum { IDD = IDD_PROPPAGE_SMALL };

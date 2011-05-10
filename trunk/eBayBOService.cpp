@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Resource.h"
+#include "LoginDlg.h"
 #include "SKUBarcodeDlg.h"
 #include "eBayBOService.h"
 #include "HTTPSocket.h"
@@ -62,12 +63,13 @@ extern mBPLA_CheckCom			BPLA_CheckCom			;
 extern mBPLA_CheckStatus		BPLA_CheckStatus		;
 extern mBPLA_CheckCut			BPLA_CheckCut			;
 
-eBayBOService::eBayBOService(int iPort, CString cActionPath, CString cService)
+eBayBOService::eBayBOService(int iPort, CString cActionPath, CString cService, CString cUser)
 {	
 	eBayBO = "rich2010.3322.org";
 	port = iPort;
 	ActionPath = cActionPath;
 	Service = cService;
+	User = cUser;
 }
 
 //DEL void eBayBOService::setEdit(CEdit *p)
@@ -312,7 +314,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 	return TRUE;
 }
 
-BOOL eBayBOService::checkLoginUser(CString LoginResult)
+CString eBayBOService::checkLoginUser(CString LoginResult)
 {
 
 	int startPos = LoginResult.Find('{');
@@ -331,7 +333,7 @@ BOOL eBayBOService::checkLoginUser(CString LoginResult)
 	//char *source = "{\"RootA\":\"Value in parent node\",\"ChildNode\":\"String Value\"}"; 
 	json_value *root = json_parse(source, &errorPos, &errorDesc, &errorLine, &allocator);
 	if(root == NULL){
-		return false;
+		return "";
 	}
 	
 	for (json_value *value = root->first_child; value; value = value->next_sibling)
@@ -343,6 +345,9 @@ BOOL eBayBOService::checkLoginUser(CString LoginResult)
 
 			case JSON_STRING:
 				//printf("\"%s\"\n", value->string_value);
+				if(strcmp(value->name, "user") == 0){
+					return value->string_value;
+				}
 			break;
 
 			case JSON_INT:
@@ -356,10 +361,8 @@ BOOL eBayBOService::checkLoginUser(CString LoginResult)
 			case JSON_BOOL:
 				//printf(value->int_value ? "true\n" : "false\n");
 				if(strcmp(value->name, "success") == 0){
-					if(value->string_value){
-						return true;
-					}else{
-						return false;
+					if(!value->string_value){
+						return "";
 					}
 				}
 			break;
@@ -368,7 +371,7 @@ BOOL eBayBOService::checkLoginUser(CString LoginResult)
 	
 	value = NULL;
 	root = NULL;
-	return false;
+	return "";
 }
 
 void eBayBOService::syncShipmentPrintStatus(CString shipmentId)
@@ -380,13 +383,14 @@ void eBayBOService::syncShipmentPrintStatus(CString shipmentId)
 		AfxMessageBox ("Failed to allocate client socket! Close and restart app.");
 	}
 
-	m_pHTTPSock->Get("/eBayBO/service.php?action=syncShipmentPrintStatus&shipmentId="+shipmentId);
+	m_pHTTPSock->Get("/eBayBO/service.php?action=syncShipmentPrintStatus&shipmentId="+shipmentId+"&by="+User);
 }
 
 void eBayBOService::processReceive(CString c_data)
 {
 	if(Service.Compare("getShippingAddressBySku") == 0)
 	{
+		MessageBox(NULL, c_data, "getShippingAddressBySku", MB_APPLMODAL);
 		ShippingAddress* sa = getShippingAddress(c_data);
 		if(sa != NULL){
 			if(printShippingAddress(sa))
@@ -398,7 +402,10 @@ void eBayBOService::processReceive(CString c_data)
 	}else if(Service.Compare("remoteLogin") == 0)
 	{
 		MessageBox(NULL, c_data, "remoteLogin", MB_APPLMODAL);
-		BOOL success = checkLoginUser(c_data);
+		CString user = checkLoginUser(c_data);
+		if(user.GetLength() > 2){
+			((CLoginDlg*)m_pDlg)->SetCurrencyUser(user);
+		}
 	}else if(Service.Compare("syncShipmentPrintStatus") == 0)
 	{
 		
@@ -532,7 +539,9 @@ BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 		return FALSE;
 	}
 	
-	state = BPLA_PrintTruetype(si->chineseTitle,2,280,"黑体",30,0);
+	//char* t = g_f_wctou8(t, (wchar_t) si->chineseTitle);
+	//(LPSTR)(LPCTSTR) UTF8ToUnicode(si->chineseTitle)
+	state = BPLA_PrintTruetype((LPSTR)(LPCTSTR) UTF8ToUnicode(si->chineseTitle),2,280,"黑体",30,0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("chineseTitle");
 		return FALSE;
@@ -572,11 +581,11 @@ CString eBayBOService::UTF8ToUnicode(char* UTF8)
 {
 
      DWORD dwUnicodeLen;        //转换后Unicode的长度
-     wchar_t *pwText;            //保存Unicode的指针
+     WCHAR *pwText;           //保存Unicode的指针
      CString strUnicode;        //返回值
      //获得转换后的长度，并分配内存
      dwUnicodeLen = MultiByteToWideChar(CP_UTF8,0,UTF8,-1,NULL,0);
-     pwText = new wchar_t[dwUnicodeLen];
+     pwText = new WCHAR[dwUnicodeLen];
      if (!pwText)
      {
          return strUnicode;
@@ -589,4 +598,82 @@ CString eBayBOService::UTF8ToUnicode(char* UTF8)
      delete []pwText;
      //返回转换好的Unicode字串
      return strUnicode;
+}
+
+size_t eBayBOService::g_f_wctou8(char * dest_str, const wchar_t src_wchar)
+{
+     int count_bytes = 0;
+     wchar_t byte_one = 0, byte_other = 0x3f; // 用于位与运算以提取位值0x3f--->00111111
+     unsigned char utf_one = 0, utf_other = 0x80; // 用于"位或"置标UTF-8编码0x80--->1000000
+     wchar_t tmp_wchar =L'0'; // 用于宽字符位置析取和位移(右移位)
+     unsigned char tmp_char =L'0';
+
+
+     if (!src_wchar)//
+         return (size_t)-1;
+
+     for (;;) // 检测字节序列长度
+     {
+         if (src_wchar <= 0x7f){ // <=01111111
+              count_bytes = 1; // ASCII字符: 0xxxxxxx( ~ 01111111)
+              byte_one = 0x7f; // 用于位与运算, 提取有效位值, 下同
+              utf_one = 0x0;
+              break;
+         }
+
+         if ( (src_wchar > 0x7f) && (src_wchar <= 0x7ff) ){ // <=0111,11111111
+              count_bytes = 2; // 110xxxxx 10xxxxxx[1](最多个位, 简写为*1)
+              byte_one = 0x1f; // 00011111, 下类推(1位的数量递减)
+              utf_one = 0xc0; // 11000000
+              break;
+
+         }
+
+         if ( (src_wchar > 0x7ff) && (src_wchar <= 0xffff) ){ //0111,11111111<=11111111,11111111
+              count_bytes = 3; // 1110xxxx 10xxxxxx[2](MaxBits: 16*1)
+              byte_one = 0xf; // 00001111
+              utf_one = 0xe0; // 11100000
+              break;
+         }
+
+         if ( (src_wchar > 0xffff) && (src_wchar <= 0x1fffff) ){ //对UCS-4的支持..
+              count_bytes = 4; // 11110xxx 10xxxxxx[3](MaxBits: 21*1)
+              byte_one = 0x7; // 00000111
+              utf_one = 0xf0; // 11110000
+              break;
+         }
+
+         if ( (src_wchar > 0x1fffff) && (src_wchar <= 0x3ffffff) ){
+              count_bytes = 5; // 111110xx 10xxxxxx[4](MaxBits: 26*1)
+              byte_one = 0x3; // 00000011
+              utf_one = 0xf8; // 11111000
+              break;
+         }
+
+         if ( (src_wchar > 0x3ffffff) && (src_wchar <= 0x7fffffff) ){
+              count_bytes = 6; // 1111110x 10xxxxxx[5](MaxBits: 31*1)
+              byte_one = 0x1; // 00000001
+              utf_one = 0xfc; // 11111100
+              break;
+         }
+
+         return (size_t)-1; // 以上皆不满足则为非法序列
+     }
+
+     // 以下几行析取宽字节中的相应位, 并分组为UTF-8编码的各个字节
+     tmp_wchar = src_wchar;
+     for (int i = count_bytes; i > 1; i--)
+     { // 一个宽字符的多字节降序赋值
+         tmp_char = (unsigned char)(tmp_wchar & byte_other);///后位与byte_other 00111111
+         dest_str[i - 1] = (tmp_char | utf_other);/// 在前面加----跟或
+         tmp_wchar >>= 6;//右移位
+     }
+
+     //这个时候i=1
+     //对UTF-8第一个字节位处理，
+     //第一个字节的开头"1"的数目就是整个串中字节的数目
+     tmp_char = (unsigned char)(tmp_wchar & byte_one);//根据上面附值得来，有效位个数
+     dest_str[0] = (tmp_char | utf_one);//根据上面附值得来1的个数
+     // 位值析取分组__End!
+     return count_bytes;
 }

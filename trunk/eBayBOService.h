@@ -29,13 +29,14 @@ public:
 	int port;
 	CString ActionPath;
 	CString Service;
+	CString User;
 	CDialog* m_pDlg;
-
-	eBayBOService(int, CString, CString);
+	
+	eBayBOService(int, CString, CString, CString);
 	void SetParentDlg(CDialog *pDlg);
 	void processReceive(CString);
 	void login(CString, CString);
-	BOOL checkLoginUser(CString);
+	CString checkLoginUser(CString);
 	void getShippingAddressBySku(CString);
 	ShippingAddress* getShippingAddress(CString);
 	BOOL printShippingAddress(ShippingAddress*);
@@ -44,5 +45,6 @@ public:
 	SkuInfo* getSkuInfo(CString);
 	BOOL printSkuBarcode(SkuInfo* si);
 	CString UTF8ToUnicode(char*);
+	size_t g_f_wctou8(char*, const wchar_t);
 };
 

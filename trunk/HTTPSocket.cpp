@@ -71,7 +71,7 @@ void HTTPSocket::OnReceive(int nErrorCode)
 	char *pBuf = new char[2049];
 	int iBuf = 2048;
 	int iRcvd;
-
+	
 	iRcvd = HTTPSocket::Receive(pBuf, iBuf);
 	pService->processReceive(pBuf);
 	CSocket::OnReceive(nErrorCode);
