@@ -2,9 +2,12 @@
 //
 
 #include "stdafx.h"
-#include "dlldemo.h"
 #include "eBayBOService.h"
+#include "HTTPSocket.h"
+#include "dlldemo.h"
 #include "LoginDlg.h"
+#include "SKUBarcodeDlg.h"
+#include "dlldemoDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -53,8 +56,10 @@ void CLoginDlg::OnLogin()
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 	//MessageBox(m_user + ":" + m_password);
-	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "remoteLogin");
+	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "remoteLogin", "");
+	ebos->SetParentDlg(this);
 	ebos->login(m_user, m_password);
+	//((CDlldemoDlg*)m_pDlg)->SetCurrencyUser("test");
 	this->EndDialog(i_r);
 }
 
@@ -62,4 +67,14 @@ void CLoginDlg::OnLoginClose()
 {
 	// TODO: Add your control notification handler code here
 	this->EndDialog(i_r);
+}
+
+void CLoginDlg::SetParentDlg(CDialog *pDlg)
+{
+	m_pDlg=pDlg;
+}
+
+void CLoginDlg::SetCurrencyUser(CString user)
+{
+	((CDlldemoDlg*)m_pDlg)->SetCurrencyUser(user);
 }

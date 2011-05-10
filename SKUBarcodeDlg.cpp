@@ -51,7 +51,7 @@ void CSKUBarcodeDlg::OnGetSkuInfo()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	eBayBOService* ebos = new eBayBOService(8080, "/inventory/service.php?action=", "getSkuInfo");
+	eBayBOService* ebos = new eBayBOService(8080, "/inventory/service.php?action=", "getSkuInfo", "");
 	ebos->SetParentDlg(this);
 	ebos->getSkuInfoBySku(sku);
 }
@@ -67,7 +67,7 @@ void CSKUBarcodeDlg::OnSkuBarcodePrint()
 	//GetDlgItemText(IDC_SKU_TITLE,  CString(si->chineseTitle));
 	//si->printNum = GetDlgItemInt(IDC_PRINT_NUM);
 	
-	eBayBOService* ebos = new eBayBOService(8080, "/inventory/service.php?action=", "getSkuInfo");
+	eBayBOService* ebos = new eBayBOService(8080, "/inventory/service.php?action=", "getSkuInfo", "");
 	SkuInfo* si = new SkuInfo();
 	si->id = (LPSTR)(LPCTSTR) sku;
 	si->chineseTitle = (LPSTR)(LPCTSTR) sku_title;

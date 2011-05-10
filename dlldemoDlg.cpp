@@ -81,6 +81,7 @@ CDlldemoDlg::CDlldemoDlg(CWnd* pParent /*=NULL*/)
 	m_time = 0;
 	m_pLogindlg = NULL;
 	m_pSkuBarcodedlg = NULL;
+	m_user = "请先登录";
 	//}}AFX_DATA_INIT
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -93,8 +94,10 @@ void CDlldemoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT3, m_cesku);
 	DDX_Control(pDX, IDC_BUTTONOPENPORT, m_buttonopenport);
 	DDX_Control(pDX, IDC_BUTTONCLOSEPORT, m_buttoncloseport);
+	DDX_Control(pDX, IDC_BUTTONPRINTADDRESS, m_buttonprintaddress);
 	DDX_Control(pDX, IDC_CHECK1, m_ctrlcheck);
 	DDX_Text(pDX, IDC_EDIT3, m_sku);
+	DDX_Text(pDX, IDC_CURRENCY_USER, m_user);
 	DDX_DateTimeCtrl(pDX, IDC_DATETIMEPICKER1, m_date);
 	//}}AFX_DATA_MAP
 }
@@ -107,7 +110,7 @@ BEGIN_MESSAGE_MAP(CDlldemoDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTONOPENPORT, OnButtonopenport)
 	ON_BN_CLICKED(IDC_BUTTONCLOSEPORT, OnButtoncloseport)
 	ON_COMMAND(IDM_LOGIN, OnLogin)
-	ON_BN_CLICKED(IDC_BUTTON1, OnButtonPrintAddress)
+	ON_BN_CLICKED(IDC_BUTTONPRINTADDRESS, OnButtonPrintAddress)
 	ON_EN_CHANGE(IDC_EDIT3, OnChangeSku)
 	ON_COMMAND(IDM_SKU_BARCODE, OnMenuSkuBarcode)
 	//}}AFX_MSG_MAP
@@ -139,6 +142,7 @@ BOOL CDlldemoDlg::OnInitDialog()
 	CString m_version = "";
 	m_version.Format("一切正常，DLL版本号-----%d",BPLA_GetVersion());
 	SetDlgItemText(IDC_STATICPRINTSTATUS,m_version);
+	//m_buttonprintaddress.EnableWindow(FALSE);
 
 	UpdateData(FALSE);
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -227,6 +231,7 @@ void CDlldemoDlg::OnLogin()
 {
 	// TODO: Add your command handler code here
 	m_pLogindlg = new CLoginDlg();
+	m_pLogindlg->SetParentDlg(this);
 	m_pLogindlg->i_r = m_pLogindlg->DoModal();
 }
 
@@ -234,13 +239,11 @@ void CDlldemoDlg::OnButtonPrintAddress()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "getShippingAddressBySku");
-	//ebos->getShippingAddressBySku("&sku=HG00009");
-	ebos->getShippingAddressBySku("&date="+m_date.Format("%Y-%m-%d")+"&sku="+m_sku);
-	//ebos->setEdit(&m_cesku);
+	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "getShippingAddressBySku", m_user);
+	ebos->getShippingAddressBySku("&date="+m_date.Format("%Y-%m-%d")+"&sku="+m_sku+"&by="+m_user);
 	m_cesku.SetWindowText("");
 	m_cesku.SetFocus();
-	delete ebos;
+	//delete ebos;
 }
 
 BOOL CDlldemoDlg::PreTranslateMessage(MSG* pMsg)
@@ -251,9 +254,6 @@ BOOL CDlldemoDlg::PreTranslateMessage(MSG* pMsg)
 	{
 		if (pMsg->wParam == VK_RETURN)
 		{
-			//eBayBOService* ebos = new eBayBOService("/eBayBO/service.php?action=", "getShippingAddressBySku");
-			//ebos->getShippingAddressBySku("&date="+m_date.Format("%Y-%m-%d")+"&sku="+m_sku);
-			//delete ebos;
 			OnButtonPrintAddress();
 			return TRUE;
 		}
@@ -281,4 +281,10 @@ void CDlldemoDlg::OnMenuSkuBarcode()
 	// TODO: Add your command handler code here
 	m_pSkuBarcodedlg = new CSKUBarcodeDlg();
 	m_pSkuBarcodedlg->i_r = m_pSkuBarcodedlg->DoModal();
+}
+
+void CDlldemoDlg::SetCurrencyUser(CString user) 
+{
+	SetDlgItemText(IDC_CURRENCY_USER, user);
+	m_buttonprintaddress.EnableWindow(TRUE);
 }
