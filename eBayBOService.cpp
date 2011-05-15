@@ -414,8 +414,12 @@ void eBayBOService::processReceive(CString c_data)
 		MessageBox(NULL, c_data, "getSkuInfo", MB_APPLMODAL);
 		SkuInfo* si = getSkuInfo(c_data);
 		if(si != NULL){
-			((CSKUBarcodeDlg*)m_pDlg)->setSkuInfo(si->chineseTitle, si->stock);
+			//AfxMessageBox (si->chineseTitle);
+			CString title = CString(si->chineseTitle);
+			CString stock = CString(si->stock);
+			((CSKUBarcodeDlg*)m_pDlg)->setSkuInfo(title, stock);
 		}
+		delete si;
 	}
 }
 
@@ -466,7 +470,8 @@ SkuInfo* eBayBOService::getSkuInfo(CString SkuInfoString)
 				}
 
 				if(strcmp(value->name, "skuChineseTitle") == 0){
-					si->chineseTitle = value->string_value;
+					//si->chineseTitle = value->string_value;
+					si->chineseTitle = (LPSTR)(LPCTSTR) UTF8ToUnicode(value->string_value);
 				}
 
 				if(strcmp(value->name, "skuCost") == 0){
@@ -508,7 +513,6 @@ SkuInfo* eBayBOService::getSkuInfo(CString SkuInfoString)
 
 BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 {
-	AfxMessageBox (si->chineseTitle);
 	int state1 = BPLA_StartDoc();
 	if(state1 != BPLA_OK)
 	{
@@ -527,36 +531,38 @@ BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 		return FALSE; 
 	}
 
-	state = BPLA_StartArea(0,900,0,0,0,0,0,0);
-	if(state!=BPLA_OK) {
-		AfxMessageBox ("BPLA_StartArea");
-		return FALSE;
-	}
+	for(int i=0;i<si->printNum;i++){
+		state = BPLA_StartArea(0,900,0,0,0,0,0,0);
+		if(state!=BPLA_OK) {
+			AfxMessageBox ("BPLA_StartArea");
+			return FALSE;
+		}
 
-	state = BPLA_PrintTruetype(si->id,2,320,"黑体",30,0);
-	if(state!=BPLA_OK) {
-		AfxMessageBox ("id");
-		return FALSE;
-	}
-	
-	//char* t = g_f_wctou8(t, (wchar_t) si->chineseTitle);
-	//(LPSTR)(LPCTSTR) UTF8ToUnicode(si->chineseTitle)
-	state = BPLA_PrintTruetype((LPSTR)(LPCTSTR) UTF8ToUnicode(si->chineseTitle),2,280,"黑体",30,0);
-	if(state!=BPLA_OK) {
-		AfxMessageBox ("chineseTitle");
-		return FALSE;
-	}
+		state = BPLA_PrintTruetype(si->id,2,320,"黑体",30,0);
+		if(state!=BPLA_OK) {
+			AfxMessageBox ("id");
+			return FALSE;
+		}
+		
+		//char* t = g_f_wctou8(t, (wchar_t) si->chineseTitle);
+		//(LPSTR)(LPCTSTR) UTF8ToUnicode(si->chineseTitle)
+		state = BPLA_PrintTruetype(si->chineseTitle,2,280,"黑体",30,0);
+		if(state!=BPLA_OK) {
+			AfxMessageBox ("chineseTitle");
+			return FALSE;
+		}
 
-	state = BPLA_PrintBarcode(si->id,470,50,1,4,80,4,2,"000");
-	if(state!=BPLA_OK) {
-		AfxMessageBox ("id");
-		return FALSE;
-	}
+		state = BPLA_PrintBarcode(si->id,470,50,1,4,80,4,2,"000");
+		if(state!=BPLA_OK) {
+			AfxMessageBox ("id");
+			return FALSE;
+		}
 
-	state = BPLA_Print(1,1,1);
-	if(state!=BPLA_OK) {
-		AfxMessageBox ("BPLA_Print");
-		return FALSE;
+		state = BPLA_Print(1,1,1);
+		if(state!=BPLA_OK) {
+			AfxMessageBox ("BPLA_Print");
+			return FALSE;
+		}
 	}
 
 	state1 = BPLA_EndDoc();
@@ -579,101 +585,24 @@ void eBayBOService::SetParentDlg(CDialog *pDlg)
 
 CString eBayBOService::UTF8ToUnicode(char* UTF8)
 {
-
-     DWORD dwUnicodeLen;        //转换后Unicode的长度
-     WCHAR *pwText;           //保存Unicode的指针
-     CString strUnicode;        //返回值
-     //获得转换后的长度，并分配内存
-     dwUnicodeLen = MultiByteToWideChar(CP_UTF8,0,UTF8,-1,NULL,0);
-     pwText = new WCHAR[dwUnicodeLen];
-     if (!pwText)
-     {
-         return strUnicode;
-     }
-     //转为Unicode
-     MultiByteToWideChar(CP_UTF8,0,UTF8,-1,pwText,dwUnicodeLen);
-     //转为CString
-     strUnicode.Format(_T("%s"),pwText);
-     //清除内存
-     delete []pwText;
-     //返回转换好的Unicode字串
-     return strUnicode;
-}
-
-size_t eBayBOService::g_f_wctou8(char * dest_str, const wchar_t src_wchar)
-{
-     int count_bytes = 0;
-     wchar_t byte_one = 0, byte_other = 0x3f; // 用于位与运算以提取位值0x3f--->00111111
-     unsigned char utf_one = 0, utf_other = 0x80; // 用于"位或"置标UTF-8编码0x80--->1000000
-     wchar_t tmp_wchar =L'0'; // 用于宽字符位置析取和位移(右移位)
-     unsigned char tmp_char =L'0';
-
-
-     if (!src_wchar)//
-         return (size_t)-1;
-
-     for (;;) // 检测字节序列长度
-     {
-         if (src_wchar <= 0x7f){ // <=01111111
-              count_bytes = 1; // ASCII字符: 0xxxxxxx( ~ 01111111)
-              byte_one = 0x7f; // 用于位与运算, 提取有效位值, 下同
-              utf_one = 0x0;
-              break;
-         }
-
-         if ( (src_wchar > 0x7f) && (src_wchar <= 0x7ff) ){ // <=0111,11111111
-              count_bytes = 2; // 110xxxxx 10xxxxxx[1](最多个位, 简写为*1)
-              byte_one = 0x1f; // 00011111, 下类推(1位的数量递减)
-              utf_one = 0xc0; // 11000000
-              break;
-
-         }
-
-         if ( (src_wchar > 0x7ff) && (src_wchar <= 0xffff) ){ //0111,11111111<=11111111,11111111
-              count_bytes = 3; // 1110xxxx 10xxxxxx[2](MaxBits: 16*1)
-              byte_one = 0xf; // 00001111
-              utf_one = 0xe0; // 11100000
-              break;
-         }
-
-         if ( (src_wchar > 0xffff) && (src_wchar <= 0x1fffff) ){ //对UCS-4的支持..
-              count_bytes = 4; // 11110xxx 10xxxxxx[3](MaxBits: 21*1)
-              byte_one = 0x7; // 00000111
-              utf_one = 0xf0; // 11110000
-              break;
-         }
-
-         if ( (src_wchar > 0x1fffff) && (src_wchar <= 0x3ffffff) ){
-              count_bytes = 5; // 111110xx 10xxxxxx[4](MaxBits: 26*1)
-              byte_one = 0x3; // 00000011
-              utf_one = 0xf8; // 11111000
-              break;
-         }
-
-         if ( (src_wchar > 0x3ffffff) && (src_wchar <= 0x7fffffff) ){
-              count_bytes = 6; // 1111110x 10xxxxxx[5](MaxBits: 31*1)
-              byte_one = 0x1; // 00000001
-              utf_one = 0xfc; // 11111100
-              break;
-         }
-
-         return (size_t)-1; // 以上皆不满足则为非法序列
-     }
-
-     // 以下几行析取宽字节中的相应位, 并分组为UTF-8编码的各个字节
-     tmp_wchar = src_wchar;
-     for (int i = count_bytes; i > 1; i--)
-     { // 一个宽字符的多字节降序赋值
-         tmp_char = (unsigned char)(tmp_wchar & byte_other);///后位与byte_other 00111111
-         dest_str[i - 1] = (tmp_char | utf_other);/// 在前面加----跟或
-         tmp_wchar >>= 6;//右移位
-     }
-
-     //这个时候i=1
-     //对UTF-8第一个字节位处理，
-     //第一个字节的开头"1"的数目就是整个串中字节的数目
-     tmp_char = (unsigned char)(tmp_wchar & byte_one);//根据上面附值得来，有效位个数
-     dest_str[0] = (tmp_char | utf_one);//根据上面附值得来1的个数
-     // 位值析取分组__End!
-     return count_bytes;
+	int dwUnicodeLen;        //转换后Unicode的长度
+	WCHAR *pwText;           //保存Unicode的指针
+	CString strUnicode;        //返回值
+	//获得转换后的长度，并分配内存
+	dwUnicodeLen = MultiByteToWideChar(CP_UTF8,0,UTF8,-1,NULL,0);
+	pwText = new WCHAR[dwUnicodeLen];
+	if (!pwText)
+	{
+	 return strUnicode;
+	}
+	//转为Unicode
+	MultiByteToWideChar(CP_UTF8,0,UTF8,-1,pwText,dwUnicodeLen);
+	strUnicode = CString(pwText);
+	//AfxMessageBox (strUnicode);
+	//转为CString
+	//strUnicode.Format(_T("%s"),pwText);
+	//清除内存
+	delete []pwText;
+	//返回转换好的Unicode字串
+	return strUnicode;
 }
