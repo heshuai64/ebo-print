@@ -45,6 +45,5 @@ public:
 	SkuInfo* getSkuInfo(CString);
 	BOOL printSkuBarcode(SkuInfo* si);
 	CString UTF8ToUnicode(char*);
-	size_t g_f_wctou8(char*, const wchar_t);
 };
 

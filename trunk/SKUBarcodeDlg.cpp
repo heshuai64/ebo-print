@@ -60,7 +60,9 @@ void CSKUBarcodeDlg::OnSkuBarcodePrint()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
-	MessageBox(sku + ":" + sku_title);
+	char buffer[20];
+	itoa( print_num, buffer, 10 );
+	MessageBox(sku + ":" + sku_title + ":" + buffer);
 
 	//SkuInfo* si = new SkuInfo();
 	//GetDlgItemText(IDC_BARCODE_SKU, CString(si->id));
@@ -77,6 +79,7 @@ void CSKUBarcodeDlg::OnSkuBarcodePrint()
 
 void CSKUBarcodeDlg::setSkuInfo(CString title, CString stock)
 {
+	//AfxMessageBox (title);
 	SetDlgItemText(IDC_SKU_TITLE, title);
 	SetDlgItemText(IDC_SKU_STOCK, stock);
 }
