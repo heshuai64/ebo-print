@@ -62,7 +62,7 @@ void CSKUBarcodeDlg::OnSkuBarcodePrint()
 	UpdateData(TRUE);
 	char buffer[20];
 	itoa( print_num, buffer, 10 );
-	MessageBox(sku + ":" + sku_title + ":" + buffer);
+	//MessageBox(sku + ":" + sku_title + ":" + buffer);
 
 	//SkuInfo* si = new SkuInfo();
 	//GetDlgItemText(IDC_BARCODE_SKU, CString(si->id));
@@ -75,6 +75,8 @@ void CSKUBarcodeDlg::OnSkuBarcodePrint()
 	si->chineseTitle = (LPSTR)(LPCTSTR) sku_title;
 	si->printNum = print_num;
 	ebos->printSkuBarcode(si);
+	delete ebos;
+	delete si;
 }
 
 void CSKUBarcodeDlg::setSkuInfo(CString title, CString stock)

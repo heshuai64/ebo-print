@@ -35,7 +35,7 @@ void HTTPSocket::Get(CString StrService)
 	_itoa(Port, StrPort, 10);
 	CString StrMessage = "GET " + StrService + " HTTP/1.1\r\n";
 	StrMessage += CString("Host: ") + Host + ":" + StrPort + "\r\n\r\n";
-	AfxMessageBox(StrMessage);
+	//AfxMessageBox(StrMessage);
 	if (HTTPSocket::Send(StrMessage, StrMessage.GetLength()) == SOCKET_ERROR)
 	{
 		wsprintf(m_szError, "Failed to send on client socket: %d", HTTPSocket::GetLastError());
