@@ -6,6 +6,35 @@
 --------------------Configuration: dlldemo - Win32 Release--------------------
 </h3>
 <h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP19B.tmp" with contents
+[
+/nologo /MT /W3 /GX /Zi /Od /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Fp"Release/dlldemo.pch" /Yu"stdafx.h" /Fo"Release/" /Fd"Release/" /FD /c 
+"X:\VC调用BPLADLL演示例程\eBayBOService.cpp"
+"X:\VC调用BPLADLL演示例程\SKUBarcodeDlg.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP19B.tmp" 
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP19C.tmp" with contents
+[
+/nologo /subsystem:windows /incremental:no /pdb:"Release/dlldemo.pdb" /debug /machine:I386 /out:"Release/dlldemo.exe" 
+".\Release\block_allocator.obj"
+".\Release\dlldemo.obj"
+".\Release\dlldemoDlg.obj"
+".\Release\eBayBOService.obj"
+".\Release\HTTPSocket.obj"
+".\Release\json.obj"
+".\Release\LoginDlg.obj"
+".\Release\Print.obj"
+".\Release\SKUBarcodeDlg.obj"
+".\Release\StdAfx.obj"
+".\Release\dlldemo.res"
+]
+Creating command line "link.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSP19C.tmp"
+<h3>Output Window</h3>
+Compiling...
+eBayBOService.cpp
+SKUBarcodeDlg.cpp
+Generating Code...
+Linking...
 
 
 

@@ -92,7 +92,7 @@ void eBayBOService::getShippingAddressBySku(CString arg)
 
 ShippingAddress* eBayBOService::getShippingAddress(CString AddressString)
 {
-	MessageBox(NULL, AddressString, "AddressString", MB_APPLMODAL);
+	//MessageBox(NULL, AddressString, "AddressString", MB_APPLMODAL);
 	if(!AddressString.IsEmpty()){
 		int startPos = AddressString.Find('{');
 		int endPos = AddressString.Find('}');
@@ -106,8 +106,8 @@ ShippingAddress* eBayBOService::getShippingAddress(CString AddressString)
 		char *errorDesc = 0;
 		int errorLine = 0;
 		block_allocator allocator(1 << 10); // 1 KB per block
+
 		//MessageBox(NULL, source, "getShippingAddress2", MB_APPLMODAL);
-		
 		//char *source = "{\"RootA\":\"Value in parent node\",\"ChildNode\":\"String Value\"}"; 
 		json_value *root = json_parse(source, &errorPos, &errorDesc, &errorLine, &allocator);
 		if(root == NULL){
@@ -236,13 +236,17 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 		return FALSE;
 	}
 
-	state = BPLA_PrintText(strcat("Attn:", sa->shipToName),2,320,1,16,1,1,"000",0,0);
+	//AfxMessageBox ("test2");
+	//char* shipToName = "Attn:";
+	//strcat(shipToName, sa->shipToName);
+	state = BPLA_PrintText(sa->shipToName,2,320,1,16,1,1,"000",0,0);
 	//state = BPLA_PrintTruetype(sa->shipToName,2,320,"ºÚÌå",30,0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipToName");
 		return FALSE;
 	}
-	
+	//AfxMessageBox ("test3");
+
 	state = BPLA_PrintText(sa->shipToAddressLine1,2,280,1,16,1,1,"000",0,0);
 	//state = BPLA_PrintTruetype(sa->shipToAddressLine1,2,280,"ºÚÌå",30,0);
 	if(state!=BPLA_OK) {
@@ -290,7 +294,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 		}
 	}
 
-	state = BPLA_PrintBarcode(sa->shipmentId,470,50,1,4,80,4,2,"000");
+	state = BPLA_PrintBarcode(sa->shipmentId,470,5,1,4,80,4,2,"000");
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipmentId");
 		return FALSE;
@@ -311,6 +315,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 		AfxMessageBox (m_info);
 		return FALSE;
 	}
+	
 	return TRUE;
 }
 
@@ -328,7 +333,7 @@ CString eBayBOService::checkLoginUser(CString LoginResult)
 	char *errorDesc = 0;
 	int errorLine = 0;
 	block_allocator allocator(1 << 10); // 1 KB per block
-	MessageBox(NULL, source, "LoginResult", MB_APPLMODAL);
+	//MessageBox(NULL, source, "LoginResult", MB_APPLMODAL);
 
 	//char *source = "{\"RootA\":\"Value in parent node\",\"ChildNode\":\"String Value\"}"; 
 	json_value *root = json_parse(source, &errorPos, &errorDesc, &errorLine, &allocator);
@@ -390,7 +395,7 @@ void eBayBOService::processReceive(CString c_data)
 {
 	if(Service.Compare("getShippingAddressBySku") == 0)
 	{
-		MessageBox(NULL, c_data, "getShippingAddressBySku", MB_APPLMODAL);
+		//MessageBox(NULL, c_data, "getShippingAddressBySku", MB_APPLMODAL);
 		ShippingAddress* sa = getShippingAddress(c_data);
 		if(sa != NULL){
 			if(printShippingAddress(sa))
@@ -401,7 +406,7 @@ void eBayBOService::processReceive(CString c_data)
 		delete sa;
 	}else if(Service.Compare("remoteLogin") == 0)
 	{
-		MessageBox(NULL, c_data, "remoteLogin", MB_APPLMODAL);
+		//MessageBox(NULL, c_data, "remoteLogin", MB_APPLMODAL);
 		CString user = checkLoginUser(c_data);
 		if(user.GetLength() > 2){
 			((CLoginDlg*)m_pDlg)->SetCurrencyUser(user);
@@ -411,7 +416,7 @@ void eBayBOService::processReceive(CString c_data)
 		
 	}else if(Service.Compare("getSkuInfo") == 0)
 	{
-		MessageBox(NULL, c_data, "getSkuInfo", MB_APPLMODAL);
+		//MessageBox(NULL, c_data, "getSkuInfo", MB_APPLMODAL);
 		SkuInfo* si = getSkuInfo(c_data);
 		if(si != NULL){
 			//AfxMessageBox (si->chineseTitle);
@@ -448,7 +453,7 @@ SkuInfo* eBayBOService::getSkuInfo(CString SkuInfoString)
 	char *errorDesc = 0;
 	int errorLine = 0;
 	block_allocator allocator(1 << 10); // 1 KB per block
-	MessageBox(NULL, source, "getSkuInfo", MB_APPLMODAL);
+	//MessageBox(NULL, source, "getSkuInfo", MB_APPLMODAL);
 
 	//char *source = "{\"RootA\":\"Value in parent node\",\"ChildNode\":\"String Value\"}"; 
 	json_value *root = json_parse(source, &errorPos, &errorDesc, &errorLine, &allocator);
@@ -552,7 +557,8 @@ BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 			return FALSE;
 		}
 
-		state = BPLA_PrintBarcode(si->id,470,50,1,4,80,4,2,"000");
+		//AfxMessageBox (si->id);
+		state = BPLA_PrintBarcode(si->id,470,10,1,0,80,4,2,"000");
 		if(state!=BPLA_OK) {
 			AfxMessageBox ("id");
 			return FALSE;
