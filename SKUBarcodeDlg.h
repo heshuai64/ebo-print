@@ -21,6 +21,7 @@ public:
 	//{{AFX_DATA(CSKUBarcodeDlg)
 	enum { IDD = IDD_SKU_BARCODE };
 	CString sku;
+	CEdit	m_cesku;
 	CString sku_title;
 	int sku_stock;
 	int print_num;

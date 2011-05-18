@@ -20,6 +20,7 @@ CSKUBarcodeDlg::CSKUBarcodeDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CSKUBarcodeDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CSKUBarcodeDlg)
+		print_num = 1;
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
 }
@@ -32,6 +33,7 @@ void CSKUBarcodeDlg::DoDataExchange(CDataExchange* pDX)
 		DDX_Text(pDX, IDC_BARCODE_SKU, sku);
 		DDX_Text(pDX, IDC_SKU_TITLE, sku_title);
 		DDX_Text(pDX, IDC_PRINT_NUM, print_num);
+		DDX_Control(pDX, IDC_BARCODE_SKU, m_cesku);
 		// NOTE: the ClassWizard will add DDX and DDV calls here
 	//}}AFX_DATA_MAP
 }
@@ -60,6 +62,7 @@ void CSKUBarcodeDlg::OnSkuBarcodePrint()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
+	m_cesku.SetFocus();
 	char buffer[20];
 	itoa( print_num, buffer, 10 );
 	//MessageBox(sku + ":" + sku_title + ":" + buffer);

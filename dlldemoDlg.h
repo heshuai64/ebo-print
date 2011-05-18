@@ -18,6 +18,7 @@ public:
 	CDlldemoDlg(CWnd* pParent = NULL);	// standard constructor
 	BOOL PreTranslateMessage(MSG* pMsg);
 	void SetCurrencyUser(CString);
+	void SetPrintStatus(CString);
 // Dialog Data
 	//{{AFX_DATA(CDlldemoDlg)
 	enum { IDD = IDD_DLLDEMO_DIALOG };
