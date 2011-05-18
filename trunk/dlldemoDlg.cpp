@@ -81,7 +81,7 @@ CDlldemoDlg::CDlldemoDlg(CWnd* pParent /*=NULL*/)
 	m_time = 0;
 	m_pLogindlg = NULL;
 	m_pSkuBarcodedlg = NULL;
-	m_user = "请先登录";
+	m_user = "请先登录,才能打印地址";
 	//}}AFX_DATA_INIT
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -133,7 +133,7 @@ BOOL CDlldemoDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	
 	//********初始化默认设置
-	m_sku = "G00008";
+	m_sku = "";
 	m_drstr = "BTP-2200E(P)";
 	m_time = 1000;
 	m_date = CTime::GetCurrentTime();
@@ -142,7 +142,7 @@ BOOL CDlldemoDlg::OnInitDialog()
 	CString m_version = "";
 	m_version.Format("一切正常，DLL版本号-----%d",BPLA_GetVersion());
 	SetDlgItemText(IDC_STATICPRINTSTATUS,m_version);
-	//m_buttonprintaddress.EnableWindow(FALSE);
+	m_buttonprintaddress.EnableWindow(FALSE);
 
 	UpdateData(FALSE);
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -240,6 +240,7 @@ void CDlldemoDlg::OnButtonPrintAddress()
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "getShippingAddressBySku", m_user);
+	ebos->SetParentDlg(this);
 	ebos->getShippingAddressBySku("&date="+m_date.Format("%Y-%m-%d")+"&sku="+m_sku+"&by="+m_user);
 	m_cesku.SetWindowText("");
 	m_cesku.SetFocus();
@@ -287,4 +288,9 @@ void CDlldemoDlg::SetCurrencyUser(CString user)
 {
 	SetDlgItemText(IDC_CURRENCY_USER, user);
 	m_buttonprintaddress.EnableWindow(TRUE);
+}
+
+void CDlldemoDlg::SetPrintStatus(CString status) 
+{
+	SetDlgItemText(IDC_STATICPRINTSTATUS, status);
 }

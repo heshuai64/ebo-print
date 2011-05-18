@@ -6,7 +6,7 @@
 #include "HTTPSocket.h"
 #include "json.h"
 #include "Print.h"
-
+#include "dlldemoDlg.h"
 
 extern mBPLA_SetSaveFile		BPLA_SetSaveFile		;
 extern mBPLA_GetVersion   		BPLA_GetVersion			;
@@ -111,6 +111,7 @@ ShippingAddress* eBayBOService::getShippingAddress(CString AddressString)
 		//char *source = "{\"RootA\":\"Value in parent node\",\"ChildNode\":\"String Value\"}"; 
 		json_value *root = json_parse(source, &errorPos, &errorDesc, &errorLine, &allocator);
 		if(root == NULL){
+			((CDlldemoDlg*)m_pDlg)->SetPrintStatus("SKU 没有订单!");
 			return NULL;
 		}
 		ShippingAddress* sa = new ShippingAddress();
@@ -239,7 +240,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 	//AfxMessageBox ("test2");
 	//char* shipToName = "Attn:";
 	//strcat(shipToName, sa->shipToName);
-	state = BPLA_PrintText(sa->shipToName,2,320,1,16,1,1,"000",0,0);
+	state = BPLA_PrintText(sa->shipToName,2,320,1,13,1,1,"000",0,0);
 	//state = BPLA_PrintTruetype(sa->shipToName,2,320,"黑体",30,0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipToName");
@@ -247,7 +248,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 	}
 	//AfxMessageBox ("test3");
 
-	state = BPLA_PrintText(sa->shipToAddressLine1,2,280,1,16,1,1,"000",0,0);
+	state = BPLA_PrintText(sa->shipToAddressLine1,2,280,1,13,1,1,"000",0,0);
 	//state = BPLA_PrintTruetype(sa->shipToAddressLine1,2,280,"黑体",30,0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipToAddressLine1");
@@ -256,7 +257,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 	
 	//AfxMessageBox (strlen(sa->shipToAddressLine2));
 	if(strlen(sa->shipToAddressLine2) > 1){
-		state = BPLA_PrintText(sa->shipToAddressLine2,2,240,1,16,1,1,"000",0,0);
+		state = BPLA_PrintText(sa->shipToAddressLine2,2,240,1,13,1,1,"000",0,0);
 		//state = BPLA_PrintTruetype(sa->shipToAddressLine2,2,240,"黑体",30,0);
 		if(state!=BPLA_OK) {
 			AfxMessageBox ("shipToAddressLine2");
@@ -264,21 +265,21 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 		}
 	}
 	
-	state = BPLA_PrintText(sa->shipToCity,2,200,1,16,1,1,"000",0,0);
+	state = BPLA_PrintText(sa->shipToCity,2,200,1,13,1,1,"000",0,0);
 	//state = BPLA_PrintTruetype(sa->shipToCity,2,200,"黑体",30,0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipToCity");
 		return FALSE;
 	}
 	
-	state = BPLA_PrintText(strcat(strcat(sa->shipToStateOrProvince, ", "), sa->shipToPostalCode),2,160,1,16,1,1,"000",0,0);
+	state = BPLA_PrintText(strcat(strcat(sa->shipToStateOrProvince, ", "), sa->shipToPostalCode),2,160,1,13,1,1,"000",0,0);
 	//state = BPLA_PrintTruetype(strcat(strcat(sa->shipToStateOrProvince, ", "), sa->shipToPostalCode),2,160,"黑体",30,0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipToStateOrProvince, shipToPostalCode");
 		return FALSE;
 	}
 	
-	state = BPLA_PrintText(sa->shipToCountry,2,120,1,16,1,1,"000",0,0);
+	state = BPLA_PrintText(sa->shipToCountry,2,120,1,13,1,1,"000",0,0);
 	//state = BPLA_PrintTruetype(sa->shipToCountry,2,120,"黑体",30,0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipToCountry");
@@ -286,7 +287,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 	}
 	
 	if(strlen(sa->shipToPhoneNo) > 1){
-		state = BPLA_PrintText(strcat("Tel:", sa->shipToPhoneNo),2,80,1,16,1,1,"000",0,0);
+		state = BPLA_PrintText(strcat("Tel:", sa->shipToPhoneNo),2,80,1,13,1,1,"000",0,0);
 		//state = BPLA_PrintTruetype(sa->shipToPhoneNo,2,80,"黑体",30,0);
 		if(state!=BPLA_OK) {
 			AfxMessageBox ("shipToPhoneNo");
@@ -294,7 +295,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 		}
 	}
 
-	state = BPLA_PrintBarcode(sa->shipmentId,470,5,1,4,80,4,2,"000");
+	state = BPLA_PrintBarcode(sa->shipmentId,470,20,1,0,60,4,2,"000");
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipmentId");
 		return FALSE;
@@ -315,7 +316,8 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 		AfxMessageBox (m_info);
 		return FALSE;
 	}
-	
+
+	((CDlldemoDlg*)m_pDlg)->SetPrintStatus("打印" + CString(sa->shipmentId) + "成功!");
 	return TRUE;
 }
 
@@ -558,7 +560,7 @@ BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 		}
 
 		//AfxMessageBox (si->id);
-		state = BPLA_PrintBarcode(si->id,470,10,1,0,80,4,2,"000");
+		state = BPLA_PrintBarcode(si->id,470,20,1,0,80,4,2,"000");
 		if(state!=BPLA_OK) {
 			AfxMessageBox ("id");
 			return FALSE;
