@@ -402,6 +402,7 @@ void eBayBOService::processReceive(CString c_data)
 		if(sa != NULL){
 			if(printShippingAddress(sa))
 			{
+				Service = "syncShipmentPrintStatus";
 				syncShipmentPrintStatus(sa->shipmentId);
 			}
 		}
