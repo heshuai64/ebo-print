@@ -225,7 +225,7 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 	//AfxMessageBox ("test1");
 	//int state = BPLA_SetPaperLength(600,0);//对于标签纸，则不需要这个函数
 	//if(state!=BPLA_OK) return FALSE; 
-	int state = BPLA_SetAllRotate(1);
+	int state = BPLA_SetAllRotate(0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("BPLA_SetAllRotate");
 		return FALSE; 
@@ -238,9 +238,8 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 	}
 
 	//AfxMessageBox ("test2");
-	//char* shipToName = "Attn:";
-	//strcat(shipToName, sa->shipToName);
-	state = BPLA_PrintText(sa->shipToName,2,320,1,13,1,1,"000",0,0);
+	char shipToName[30] = "Attn:";
+	state = BPLA_PrintText(strcat(shipToName, sa->shipToName),2,320,1,13,1,1,"000",0,0);
 	//state = BPLA_PrintTruetype(sa->shipToName,2,320,"黑体",30,0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("shipToName");
@@ -287,7 +286,8 @@ BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 	}
 	
 	if(strlen(sa->shipToPhoneNo) > 1){
-		state = BPLA_PrintText(strcat("Tel:", sa->shipToPhoneNo),2,80,1,13,1,1,"000",0,0);
+		char shipToPhoneNo[30] = "Tel:";
+		state = BPLA_PrintText(strcat(shipToPhoneNo, sa->shipToPhoneNo),2,80,1,13,1,1,"000",0,0);
 		//state = BPLA_PrintTruetype(sa->shipToPhoneNo,2,80,"黑体",30,0);
 		if(state!=BPLA_OK) {
 			AfxMessageBox ("shipToPhoneNo");
@@ -532,7 +532,7 @@ BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 	
 	//int state = BPLA_SetPaperLength(600,0);//对于标签纸，则不需要这个函数
 	//if(state!=BPLA_OK) return FALSE; 
-	int state = BPLA_SetAllRotate(1);
+	int state = BPLA_SetAllRotate(0);
 	if(state!=BPLA_OK) {
 		AfxMessageBox ("BPLA_SetAllRotate");
 		return FALSE; 
