@@ -523,6 +523,14 @@ SkuInfo* eBayBOService::getSkuInfo(CString SkuInfoString)
 
 BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 {
+	/*
+	CString TL = CString(si->chineseTitle);
+	int tLength = TL.GetLength();
+	AfxMessageBox (TL.Left(24));
+	AfxMessageBox (TL.Right(tLength - 24));
+	return FALSE;
+	*/
+
 	int state1 = BPLA_StartDoc();
 	if(state1 != BPLA_OK)
 	{
@@ -542,12 +550,14 @@ BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 	}
 
 	for(int i=0;i<si->printNum;i++){
-		state = BPLA_StartArea(0,900,0,0,0,0,0,0);
+		state = BPLA_StartArea(0,500,0,0,0,0,0,0);
 		if(state!=BPLA_OK) {
 			AfxMessageBox ("BPLA_StartArea");
 			return FALSE;
 		}
-
+		
+		/*
+		2011-06-12 version
 		state = BPLA_PrintTruetype(si->id,2,130,"黑体",30,0);
 		if(state!=BPLA_OK) {
 			AfxMessageBox ("id");
@@ -566,6 +576,36 @@ BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 		state = BPLA_PrintBarcode(si->id,2,20,1,20,60,4,2,"000");
 		if(state!=BPLA_OK) {
 			AfxMessageBox ("id");
+			return FALSE;
+		}
+		*/
+		
+		CString TL = CString(si->chineseTitle);
+		int tLength = TL.GetLength();
+
+		state = BPLA_PrintTruetype((LPSTR)(LPCTSTR) TL.Left(24),5,140,"黑体",30,0);
+		if(state!=BPLA_OK) {
+			AfxMessageBox ("chineseTitleLine1");
+			return FALSE;
+		}
+		
+		if(tLength > 24){
+			state = BPLA_PrintTruetype((LPSTR)(LPCTSTR) TL.Right(tLength - 24),5,100,"黑体",30,0);
+			if(state!=BPLA_OK) {
+				AfxMessageBox ("chineseTitleLine2");
+				return FALSE;
+			}
+		}
+
+		state = BPLA_PrintBarcode(si->id,160,10,1,20,60,4,2,"000");
+		if(state!=BPLA_OK) {
+			AfxMessageBox ("barcode");
+			return FALSE;
+		}
+
+		state = BPLA_PrintTruetype(si->id,5,20,"黑体",30,0);
+		if(state!=BPLA_OK) {
+			AfxMessageBox ("sku");
 			return FALSE;
 		}
 
