@@ -69,12 +69,17 @@ void HTTPSocket::OnOutOfBandData(int nErrorCode)
 void HTTPSocket::OnReceive(int nErrorCode) 
 {
 	char *pBuf = new char[2049];
+	memset(pBuf, 0, 2049);
 	int iBuf = 2048;
 	int iRcvd;
 	
+	//AfxMessageBox("init:" + CString(pBuf));
 	iRcvd = HTTPSocket::Receive(pBuf, iBuf);
 	pService->processReceive(pBuf);
 	CSocket::OnReceive(nErrorCode);
+	//AfxMessageBox("before:" + CString(pBuf));
+	delete[] pBuf;
+	//AfxMessageBox("after:" + CString(pBuf));
 }
 
 void HTTPSocket::OnSend(int nErrorCode) 
