@@ -19,6 +19,8 @@ public:
 	BOOL PreTranslateMessage(MSG* pMsg);
 	void SetCurrencyUser(CString);
 	void SetPrintStatus(CString);
+	BOOL isTest();
+	void setProgress(int nPos);
 // Dialog Data
 	//{{AFX_DATA(CDlldemoDlg)
 	enum { IDD = IDD_DLLDEMO_DIALOG };
@@ -27,6 +29,7 @@ public:
 	CButton	m_buttoncloseport;
 	CButton	m_buttonprintaddress;
 	CButton	m_ctrlcheck;
+	CProgressCtrl m_progress;
 	int		m_port;
 	int		m_label;
 	CString	m_drstr;

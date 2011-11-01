@@ -96,6 +96,7 @@ void CDlldemoDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTONCLOSEPORT, m_buttoncloseport);
 	DDX_Control(pDX, IDC_BUTTONPRINTADDRESS, m_buttonprintaddress);
 	DDX_Control(pDX, IDC_CHECK1, m_ctrlcheck);
+	DDX_Control(pDX, IDC_PROGRESS1, m_progress);
 	DDX_Text(pDX, IDC_EDIT3, m_sku);
 	DDX_Text(pDX, IDC_CURRENCY_USER, m_user);
 	DDX_DateTimeCtrl(pDX, IDC_DATETIMEPICKER1, m_date);
@@ -186,9 +187,9 @@ HCURSOR CDlldemoDlg::OnQueryDragIcon()
 
 void CDlldemoDlg::OnCheck1() 
 {
-	int index = m_ctrlcheck.GetCheck(); 
-	if(index == 1)	BPLA_SetSaveFile(true,"test.txt",false);
-	else BPLA_SetSaveFile(false,"test.txt",false);
+	//int index = m_ctrlcheck.GetCheck(); 
+	//if(index == 1)	BPLA_SetSaveFile(true,"test.txt",false);
+	//else BPLA_SetSaveFile(false,"test.txt",false);
 }
 
 void CDlldemoDlg::OnButtonopenport() 
@@ -239,9 +240,14 @@ void CDlldemoDlg::OnButtonPrintAddress()
 {
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
+	setProgress(10);
 	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "getShippingAddressBySku", m_user);
 	ebos->SetParentDlg(this);
-	ebos->getShippingAddressBySku("&date="+m_date.Format("%Y-%m-%d")+"&sku="+m_sku+"&by="+m_user);
+	CString debug = "0";
+	if(m_ctrlcheck.GetCheck() == 1){
+		debug = "1";
+	}
+	ebos->getShippingAddressBySku("&date="+m_date.Format("%Y-%m-%d")+"&sku="+m_sku+"&by="+m_user+"&debug="+debug);
 	m_cesku.SetWindowText("");
 	m_cesku.SetFocus();
 	//delete ebos;
@@ -293,4 +299,16 @@ void CDlldemoDlg::SetCurrencyUser(CString user)
 void CDlldemoDlg::SetPrintStatus(CString status) 
 {
 	SetDlgItemText(IDC_STATICPRINTSTATUS, status);
+}
+
+BOOL CDlldemoDlg::isTest()
+{
+	int index = m_ctrlcheck.GetCheck(); 
+	if(index == 1) return true;
+	else return false;
+}
+
+void CDlldemoDlg::setProgress(int nPos)
+{
+	m_progress.SetPos(nPos);
 }

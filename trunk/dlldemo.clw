@@ -33,7 +33,7 @@ Type=0
 HeaderFile=dlldemoDlg.h
 ImplementationFile=dlldemoDlg.cpp
 Filter=D
-LastObject=CDlldemoDlg
+LastObject=IDC_PROGRESS1
 BaseClass=CDialog
 VirtualFilter=dWC
 
@@ -42,17 +42,18 @@ VirtualFilter=dWC
 [DLG:IDD_DLLDEMO_DIALOG]
 Type=1
 Class=CDlldemoDlg
-ControlCount=10
+ControlCount=11
 Control1=IDC_BUTTONOPENPORT,button,1342242816
 Control2=IDC_CHECK1,button,1342242819
 Control3=IDC_BUTTONCLOSEPORT,button,1476460544
 Control4=IDC_STATICPRINTSTATUS,static,1342312972
-Control5=IDC_DATETIMEPICKER1,SysDateTimePick32,1342242853
+Control5=IDC_DATETIMEPICKER1,SysDateTimePick32,1073807397
 Control6=IDC_EDIT3,edit,1350631552
 Control7=IDC_STATIC,static,1342308352
 Control8=IDC_BUTTONPRINTADDRESS,button,1342242816
 Control9=IDC_CURRENCY_USER,static,1342312960
 Control10=IDC_STATIC,static,1342308352
+Control11=IDC_PROGRESS1,msctls_progress32,1350565888
 
 [MNU:IDR_MENU1]
 Type=1

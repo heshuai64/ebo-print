@@ -85,9 +85,13 @@ void eBayBOService::getShippingAddressBySku(CString arg)
 	{
 		AfxMessageBox ("Failed to allocate client socket! Close and restart app.");
 	}
-
+	/*
+	if(((CDlldemoDlg*)m_pDlg)->isTest() && User == "admin"){
+		AfxMessageBox(ActionPath+Service+arg);
+	}
+	*/
 	m_pHTTPSock->Get(ActionPath+Service+arg);
-
+	
 }
 
 ShippingAddress* eBayBOService::getShippingAddress(CString AddressString)
@@ -209,6 +213,11 @@ void eBayBOService::login(CString user, CString password)
 
 BOOL eBayBOService::printShippingAddress(ShippingAddress* sa)
 {
+	//AfxMessageBox (sa->shipmentId);
+	if(User == "admin"){
+		((CDlldemoDlg*)m_pDlg)->SetPrintStatus("打印" + CString(sa->shipmentId) + "测试成功!");
+		return true;
+	}
 	//为了准确判断数据发送成功与否，建议对于每个调用的函数均检查其返回值。
 	//具体函数的返回值请参考DLL的说明文档。
     //*********驱动启动打印
@@ -391,15 +400,27 @@ void eBayBOService::syncShipmentPrintStatus(CString shipmentId)
 	{
 		AfxMessageBox ("Failed to allocate client socket! Close and restart app.");
 	}
-
-	m_pHTTPSock->Get("/eBayBO/service.php?action=syncShipmentPrintStatus&shipmentId="+shipmentId+"&by="+User);
+	
+	CString debug = "0";
+	if(((CDlldemoDlg*)m_pDlg)->isTest()){
+		debug = "1";
+	}
+	
+	CString url = "/eBayBO/service.php?action=syncShipmentPrintStatus&shipmentId="+shipmentId+"&by="+User+"&debug="+debug;
+	/*
+	if(User == "admin"){
+		AfxMessageBox(url);
+	}
+	*/
+	m_pHTTPSock->Get(url);
 }
 
 void eBayBOService::processReceive(CString c_data)
 {
 	if(Service.Compare("getShippingAddressBySku") == 0)
 	{
-		//MessageBox(NULL, c_data, "getShippingAddressBySku", MB_APPLMODAL);
+		((CDlldemoDlg*)m_pDlg)->setProgress(100);
+		//AfxMessageBox("processReceive:" + c_data);
 		ShippingAddress* sa = getShippingAddress(c_data);
 		if(sa != NULL){
 			if(printShippingAddress(sa))

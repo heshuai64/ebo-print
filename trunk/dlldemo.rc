@@ -73,7 +73,7 @@ IDR_MAINFRAME           ICON    DISCARDABLE     "res\\dlldemo.ico"
 // Dialog
 //
 
-IDD_DLLDEMO_DIALOG DIALOGEX 0, 0, 328, 122
+IDD_DLLDEMO_DIALOG DIALOGEX 0, 0, 328, 117
 STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
     WS_SYSMENU
 EXSTYLE WS_EX_APPWINDOW
@@ -81,22 +81,24 @@ CAPTION "子系统"
 MENU IDR_MENU1
 FONT 9, "宋体"
 BEGIN
-    PUSHBUTTON      "开启端口",IDC_BUTTONOPENPORT,7,82,45,20
-    CONTROL         "指令保存到文件test.txt，不向端口发送",IDC_CHECK1,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,15,62,163,10
-    PUSHBUTTON      "关闭端口",IDC_BUTTONCLOSEPORT,247,82,45,20,WS_DISABLED
+    PUSHBUTTON      "开启端口",IDC_BUTTONOPENPORT,13,62,45,20
+    CONTROL         "测试",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    163,13,40,10
+    PUSHBUTTON      "关闭端口",IDC_BUTTONCLOSEPORT,253,62,45,20,WS_DISABLED
     CONTROL         "一切正常",IDC_STATICPRINTSTATUS,"Static",
                     SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | SS_SUNKEN | 
-                    WS_GROUP,65,83,173,19
+                    WS_GROUP,71,63,173,19
     CONTROL         "DateTimePicker1",IDC_DATETIMEPICKER1,"SysDateTimePick32",
-                    DTS_RIGHTALIGN | DTS_UPDOWN | DTS_LONGDATEFORMAT | 
-                    WS_TABSTOP,13,38,74,13
-    EDITTEXT        IDC_EDIT3,113,38,75,14,ES_AUTOHSCROLL
-    LTEXT           "SKU:",IDC_STATIC,93,41,16,8
-    PUSHBUTTON      "打印地址",IDC_BUTTONPRINTADDRESS,197,40,69,13
+                    DTS_RIGHTALIGN | DTS_UPDOWN | DTS_LONGDATEFORMAT | NOT 
+                    WS_VISIBLE | WS_TABSTOP,233,13,74,13
+    EDITTEXT        IDC_EDIT3,42,38,108,14,ES_AUTOHSCROLL
+    LTEXT           "SKU:",IDC_STATIC,19,39,16,8
+    PUSHBUTTON      "打印地址",IDC_BUTTONPRINTADDRESS,161,38,69,13
     LTEXT           "请先登录,才能打印地址",IDC_CURRENCY_USER,57,11,92,15,
                     SS_CENTERIMAGE | SS_SUNKEN
     LTEXT           "当前用户:",IDC_STATIC,13,15,43,12
+    CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,
+                    16,90,290,14
 END
 
 IDD_PROPPAGE_SMALL DIALOG DISCARDABLE  0, 0, 163, 115
@@ -155,14 +157,14 @@ BEGIN
         BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
-            VALUE "FileDescription", "dlldemo Microsoft 基础类应用程序\0"
+            VALUE "FileDescription", "子系统\0"
             VALUE "FileVersion", "1, 2, 0, 1\0"
             VALUE "InternalName", "dlldemo\0"
-            VALUE "LegalCopyright", "版权所有 (C) 2002\0"
+            VALUE "LegalCopyright", "版权所有 (C) 2011\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "dlldemo.EXE\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "dlldemo 应用程序\0"
+            VALUE "ProductName", "子系统\0"
             VALUE "ProductVersion", "1, 2, 0, 1\0"
             VALUE "SpecialBuild", "\0"
         END
@@ -189,7 +191,7 @@ BEGIN
         LEFTMARGIN, 5
         RIGHTMARGIN, 321
         TOPMARGIN, 6
-        BOTTOMMARGIN, 115
+        BOTTOMMARGIN, 110
     END
 
     IDD_PROPPAGE_SMALL, DIALOG
