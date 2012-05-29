@@ -31,19 +31,23 @@ public:
 	CString Service;
 	CString User;
 	CDialog* m_pDlg;
-	
+	sqlite3* db;
+	CString debug;
+
 	eBayBOService(int, CString, CString, CString);
-	void SetParentDlg(CDialog *pDlg);
+	void setParentDlg(CDialog *pDlg);
+	void setDB(sqlite3* sqliteDB);
 	void processReceive(CString);
 	void login(CString, CString);
 	CString checkLoginUser(CString);
 	void getShippingAddressBySku(CString);
 	ShippingAddress* getShippingAddress(CString);
 	BOOL printShippingAddress(ShippingAddress*);
-	void syncShipmentPrintStatus(CString);
+	void syncShipmentPrintStatus(CString, CString, CString);
 	void getSkuInfoBySku(CString);
 	SkuInfo* getSkuInfo(CString);
 	BOOL printSkuBarcode(SkuInfo* si);
 	CString UTF8ToUnicode(char*);
+	void setDebug(CString);
 };
 

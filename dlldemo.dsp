@@ -44,7 +44,6 @@ RSC=rc.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
 # ADD CPP /nologo /MT /w /W0 /GX /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /c
-# SUBTRACT CPP /Z<none> /O<none>
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x804 /d "NDEBUG" /d "_AFXDLL"
@@ -54,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 /nologo /subsystem:windows /machine:I386
+# ADD LINK32 sqlite3.lib /nologo /subsystem:windows /machine:I386 /out:"Release/printSystem.exe"
 # SUBTRACT LINK32 /debug
 
 !ELSEIF  "$(CFG)" == "dlldemo - Win32 Debug"
@@ -137,6 +136,14 @@ SOURCE=.\SKUBarcodeDlg.cpp
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
+# Begin Source File
+
+SOURCE=.\UploadAddressDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\URLEncode.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -183,7 +190,19 @@ SOURCE=.\SKUBarcodeDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\sqlite3.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\UploadAddressDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\URLEncode.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -191,11 +210,19 @@ SOURCE=.\StdAfx.h
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
 
+SOURCE=".\res\Device-Printer.ico"
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\dlldemo.ico
 # End Source File
 # Begin Source File
 
 SOURCE=.\res\dlldemo.rc2
+# End Source File
+# Begin Source File
+
+SOURCE=.\print.ico
 # End Source File
 # End Group
 # Begin Source File

@@ -2,11 +2,14 @@
 //
 
 #include "stdafx.h"
+#include "sqlite3.h"
+#include "URLEncode.h"
 #include "eBayBOService.h"
 #include "HTTPSocket.h"
 #include "dlldemo.h"
 #include "LoginDlg.h"
 #include "SKUBarcodeDlg.h"
+#include "UploadAddressDlg.h"
 #include "dlldemoDlg.h"
 
 #ifdef _DEBUG
@@ -57,7 +60,7 @@ void CLoginDlg::OnLogin()
 	UpdateData(TRUE);
 	//MessageBox(m_user + ":" + m_password);
 	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "remoteLogin", "");
-	ebos->SetParentDlg(this);
+	ebos->setParentDlg(this);
 	ebos->login(m_user, m_password);
 	//((CDlldemoDlg*)m_pDlg)->SetCurrencyUser("test");
 	this->EndDialog(i_r);

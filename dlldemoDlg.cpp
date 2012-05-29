@@ -2,13 +2,17 @@
 //
 
 #include "stdafx.h"
+#include "sqlite3.h"
+#include "URLEncode.h"
 #include "eBayBOService.h"
 #include "HTTPSocket.h"
 #include "dlldemo.h"
 #include "LoginDlg.h"
 #include "SKUBarcodeDlg.h"
+#include "UploadAddressDlg.h"
 #include "dlldemoDlg.h"
 #include "Print.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -114,6 +118,9 @@ BEGIN_MESSAGE_MAP(CDlldemoDlg, CDialog)
 	ON_BN_CLICKED(IDC_BUTTONPRINTADDRESS, OnButtonPrintAddress)
 	ON_EN_CHANGE(IDC_EDIT3, OnChangeSku)
 	ON_COMMAND(IDM_SKU_BARCODE, OnMenuSkuBarcode)
+	ON_COMMAND(IDM_UPLOAD_ADDRESS, OnMenuUploadAddress)
+	ON_WM_CLOSE()
+	ON_WM_CANCELMODE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -139,7 +146,16 @@ BOOL CDlldemoDlg::OnInitDialog()
 	m_time = 1000;
 	m_date = CTime::GetCurrentTime();
 	LoadDll();
-	
+	db = NULL;
+    int rc = sqlite3_open("test.db", &db); 
+	if( rc ){
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        exit(1);
+    }
+	char **errMsg = NULL;
+	rc = sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS packed_shipment(shipmentId varchar(14), operator varchar(10), dateTime varchar(20));", NULL, NULL, errMsg);
+
 	CString m_version = "";
 	m_version.Format("一切正常，DLL版本号-----%d",BPLA_GetVersion());
 	SetDlgItemText(IDC_STATICPRINTSTATUS,m_version);
@@ -242,7 +258,8 @@ void CDlldemoDlg::OnButtonPrintAddress()
 	UpdateData(TRUE);
 	setProgress(10);
 	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "getShippingAddressBySku", m_user);
-	ebos->SetParentDlg(this);
+	ebos->setParentDlg(this);
+	ebos->setDB(db);
 	CString debug = "0";
 	if(m_ctrlcheck.GetCheck() == 1){
 		debug = "1";
@@ -290,6 +307,15 @@ void CDlldemoDlg::OnMenuSkuBarcode()
 	m_pSkuBarcodedlg->i_r = m_pSkuBarcodedlg->DoModal();
 }
 
+void CDlldemoDlg::OnMenuUploadAddress()
+{
+	
+	m_pUploadAddressDlg = new CUploadAddressDlg();
+	//m_pLogindlg->SetParentDlg(this);
+	m_pUploadAddressDlg->setDB(db);
+	m_pUploadAddressDlg->DoModal();
+}
+
 void CDlldemoDlg::SetCurrencyUser(CString user) 
 {
 	SetDlgItemText(IDC_CURRENCY_USER, user);
@@ -311,4 +337,27 @@ BOOL CDlldemoDlg::isTest()
 void CDlldemoDlg::setProgress(int nPos)
 {
 	m_progress.SetPos(nPos);
+}
+
+void CDlldemoDlg::printShipmentAddressSuccess(CString shipmentId, CString user)
+{
+		
+	char **errMsg = NULL;
+    int rc;
+	CTime m_date = CTime::GetCurrentTime(); 
+	rc = sqlite3_exec(db, "insert into packed_shipment values ('"+shipmentId+"','"+user+"','"+m_date.Format("%Y-%m-%d %H:%M:%S")+"')", NULL, NULL, errMsg);
+}
+
+void CDlldemoDlg::OnClose() 
+{
+	sqlite3_close(db);
+	CDialog::OnClose();
+}
+
+void CDlldemoDlg::OnCancelMode() 
+{
+	CDialog::OnCancelMode();
+	
+	// TODO: Add your message handler code here
+	
 }
