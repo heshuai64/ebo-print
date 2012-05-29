@@ -2,10 +2,13 @@
 #include "Resource.h"
 #include "LoginDlg.h"
 #include "SKUBarcodeDlg.h"
+#include "sqlite3.h"
+#include "URLEncode.h"
 #include "eBayBOService.h"
 #include "HTTPSocket.h"
 #include "json.h"
 #include "Print.h"
+#include "UploadAddressDlg.h"
 #include "dlldemoDlg.h"
 
 extern mBPLA_SetSaveFile		BPLA_SetSaveFile		;
@@ -70,6 +73,7 @@ eBayBOService::eBayBOService(int iPort, CString cActionPath, CString cService, C
 	ActionPath = cActionPath;
 	Service = cService;
 	User = cUser;
+	debug = "0";
 }
 
 //DEL void eBayBOService::setEdit(CEdit *p)
@@ -392,7 +396,7 @@ CString eBayBOService::checkLoginUser(CString LoginResult)
 	return "";
 }
 
-void eBayBOService::syncShipmentPrintStatus(CString shipmentId)
+void eBayBOService::syncShipmentPrintStatus(CString shipmentId, CString user, CString printOn)
 {
 	HTTPSocket* m_pHTTPSock;
 
@@ -401,18 +405,22 @@ void eBayBOService::syncShipmentPrintStatus(CString shipmentId)
 		AfxMessageBox ("Failed to allocate client socket! Close and restart app.");
 	}
 	
-	CString debug = "0";
+	/*
 	if(((CDlldemoDlg*)m_pDlg)->isTest()){
 		debug = "1";
 	}
-	
-	CString url = "/eBayBO/service.php?action=syncShipmentPrintStatus&shipmentId="+shipmentId+"&by="+User+"&debug="+debug;
+	*/
+	CURLEncode url_encode;
+
+	CString url = "/eBayBO/service.php?action=syncShipmentPrintStatus&shipmentId="+shipmentId+"&by="+user+"&debug="+debug+"&printOn="+url_encode.URLEncode(printOn);
+	m_pHTTPSock->Get(url);
+
 	/*
 	if(User == "admin"){
 		AfxMessageBox(url);
 	}
 	*/
-	m_pHTTPSock->Get(url);
+
 }
 
 void eBayBOService::processReceive(CString c_data)
@@ -426,7 +434,8 @@ void eBayBOService::processReceive(CString c_data)
 			if(printShippingAddress(sa))
 			{
 				Service = "syncShipmentPrintStatus";
-				syncShipmentPrintStatus(sa->shipmentId);
+				//syncShipmentPrintStatus(sa->shipmentId);
+				((CDlldemoDlg*)m_pDlg)->printShipmentAddressSuccess(sa->shipmentId, User);
 			}
 		}
 		delete sa;
@@ -439,7 +448,9 @@ void eBayBOService::processReceive(CString c_data)
 		}
 	}else if(Service.Compare("syncShipmentPrintStatus") == 0)
 	{
-		
+		int startPos = c_data.Find("SUCCESS:");
+		c_data = c_data.Mid(startPos+8);
+		((CUploadAddressDlg*)m_pDlg)->syncShipmentPrintStatusSuccess(c_data);
 	}else if(Service.Compare("getSkuInfo") == 0)
 	{
 		//MessageBox(NULL, c_data, "getSkuInfo", MB_APPLMODAL);
@@ -650,9 +661,14 @@ BOOL eBayBOService::printSkuBarcode(SkuInfo* si)
 	return TRUE;
 }
 
-void eBayBOService::SetParentDlg(CDialog *pDlg)
+void eBayBOService::setParentDlg(CDialog *pDlg)
 {
 	m_pDlg=pDlg;
+}
+
+void eBayBOService::setDB(sqlite3* sqliteDB)
+{
+	db = sqliteDB;
 }
 
 CString eBayBOService::UTF8ToUnicode(char* UTF8)
@@ -677,4 +693,9 @@ CString eBayBOService::UTF8ToUnicode(char* UTF8)
 	delete []pwText;
 	//返回转换好的Unicode字串
 	return strUnicode;
+}
+
+void eBayBOService::setDebug(CString Sdebug)
+{
+	debug = Sdebug;
 }

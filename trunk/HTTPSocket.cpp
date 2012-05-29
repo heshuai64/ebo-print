@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include "sqlite3.h"
+#include "URLEncode.h"
 #include "eBayBOService.h"
 #include "HTTPSocket.h"
 

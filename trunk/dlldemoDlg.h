@@ -19,6 +19,7 @@ public:
 	BOOL PreTranslateMessage(MSG* pMsg);
 	void SetCurrencyUser(CString);
 	void SetPrintStatus(CString);
+	void CDlldemoDlg::printShipmentAddressSuccess(CString, CString);
 	BOOL isTest();
 	void setProgress(int nPos);
 // Dialog Data
@@ -39,7 +40,9 @@ public:
 	CString m_user;
 	HTTPSocket* m_pHTTPSock;
 	CLoginDlg* m_pLogindlg;
+	CUploadAddressDlg* m_pUploadAddressDlg;
 	CSKUBarcodeDlg* m_pSkuBarcodedlg;
+	sqlite3* db;
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
@@ -63,6 +66,9 @@ protected:
 	afx_msg void OnButtonPrintAddress();
 	afx_msg void OnChangeSku();
 	afx_msg void OnMenuSkuBarcode();
+	afx_msg void OnMenuUploadAddress();
+	afx_msg void OnClose();
+	afx_msg void OnCancelMode();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

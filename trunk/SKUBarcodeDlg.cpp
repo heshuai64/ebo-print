@@ -3,6 +3,8 @@
 
 #include "stdafx.h"
 #include "dlldemo.h"
+#include "sqlite3.h"
+#include "URLEncode.h"
 #include "eBayBOService.h"
 #include "SKUBarcodeDlg.h"
 
@@ -54,7 +56,7 @@ void CSKUBarcodeDlg::OnGetSkuInfo()
 	// TODO: Add your control notification handler code here
 	UpdateData(TRUE);
 	eBayBOService* ebos = new eBayBOService(8080, "/inventory/service.php?action=", "getSkuInfo", "");
-	ebos->SetParentDlg(this);
+	ebos->setParentDlg(this);
 	ebos->getSkuInfoBySku(sku);
 }
 
