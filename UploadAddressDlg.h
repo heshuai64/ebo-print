@@ -14,10 +14,13 @@ class CUploadAddressDlg : public CDialog
 {
 // Construction
 public:
+	CDialog* m_pDlg;
 	void setDB(sqlite3* sqliteDB);
 	void syncShipmentPrintStatusSuccess(CString);
 	void setProgress(int);
 	void setTotalShipmentNum(int);
+	CDialog* getParentDlg();
+	void setParentDlg(CDialog *pDlg);
 	CUploadAddressDlg(CWnd* pParent = NULL);   // standard constructor
 	OnInitDialog();
 // Dialog Data

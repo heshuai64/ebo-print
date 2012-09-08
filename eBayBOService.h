@@ -41,6 +41,7 @@ public:
 	void login(CString, CString);
 	CString checkLoginUser(CString);
 	void getShippingAddressBySku(CString);
+	void printShipmentAddressSuccessByShipmentId(CString);
 	ShippingAddress* getShippingAddress(CString);
 	BOOL printShippingAddress(ShippingAddress*);
 	void syncShipmentPrintStatus(CString, CString, CString);

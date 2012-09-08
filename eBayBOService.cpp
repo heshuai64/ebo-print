@@ -98,6 +98,18 @@ void eBayBOService::getShippingAddressBySku(CString arg)
 	
 }
 
+void eBayBOService::printShipmentAddressSuccessByShipmentId(CString shipmentId)
+{
+	HTTPSocket* m_pHTTPSock;
+	
+	if((m_pHTTPSock = new HTTPSocket(this, eBayBO, port)) == NULL)
+	{
+		AfxMessageBox ("Failed to allocate client socket! Close and restart app.");
+	}
+	CString url = "/eBayBO/service.php?action=printShipmentAddressSuccessByShipmentId&shipmentId="+shipmentId+"&debug="+debug;
+	m_pHTTPSock->Get(url);
+}
+
 ShippingAddress* eBayBOService::getShippingAddress(CString AddressString)
 {
 	//MessageBox(NULL, AddressString, "AddressString", MB_APPLMODAL);
@@ -433,8 +445,10 @@ void eBayBOService::processReceive(CString c_data)
 		if(sa != NULL){
 			if(printShippingAddress(sa))
 			{
-				Service = "syncShipmentPrintStatus";
+				//Service = "syncShipmentPrintStatus";
 				//syncShipmentPrintStatus(sa->shipmentId);
+				Service = "printShipmentAddressSuccessByShipmentId";
+				printShipmentAddressSuccessByShipmentId(sa->shipmentId);
 				((CDlldemoDlg*)m_pDlg)->printShipmentAddressSuccess(sa->shipmentId, User);
 			}
 		}
