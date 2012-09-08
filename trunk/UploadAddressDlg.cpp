@@ -6,7 +6,12 @@
 #include "sqlite3.h"
 #include "URLEncode.h"
 #include "eBayBOService.h"
+#include "HTTPSocket.h"
+#include "LoginDlg.h"
+#include "SKUBarcodeDlg.h"
 #include "UploadAddressDlg.h"
+#include "dlldemoDlg.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -66,7 +71,10 @@ int syncPackedShipment(void* data, int n_columns, char** column_values, char** c
 {
 	//AfxMessageBox (column_values[0]);
 	eBayBOService* ebos = new eBayBOService(8888, "/eBayBO/service.php?action=", "syncShipmentPrintStatus", "");
-	ebos->setDebug("1");
+
+	if(((CDlldemoDlg*)((CUploadAddressDlg*)data)->getParentDlg())->isTest()){
+		ebos->setDebug("1");
+	}
 	ebos->setParentDlg((CUploadAddressDlg*)data);
 	ebos->syncShipmentPrintStatus(column_values[0], column_values[1], column_values[2]);
 	return 0;
@@ -104,4 +112,14 @@ void CUploadAddressDlg::setProgress(int nPos)
 void CUploadAddressDlg::setTotalShipmentNum(int total)
 {
 	shipmentTotalNum = total;
+}
+
+CDialog* CUploadAddressDlg::getParentDlg()
+{
+	return m_pDlg;
+}
+
+void CUploadAddressDlg::setParentDlg(CDialog *pDlg)
+{
+	m_pDlg=pDlg;
 }

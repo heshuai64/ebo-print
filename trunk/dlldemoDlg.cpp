@@ -147,7 +147,7 @@ BOOL CDlldemoDlg::OnInitDialog()
 	m_date = CTime::GetCurrentTime();
 	LoadDll();
 	db = NULL;
-    int rc = sqlite3_open("test.db", &db); 
+    int rc = sqlite3_open("data.db", &db); 
 	if( rc ){
         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
@@ -263,6 +263,7 @@ void CDlldemoDlg::OnButtonPrintAddress()
 	CString debug = "0";
 	if(m_ctrlcheck.GetCheck() == 1){
 		debug = "1";
+		ebos->setDebug("1");
 	}
 	ebos->getShippingAddressBySku("&date="+m_date.Format("%Y-%m-%d")+"&sku="+m_sku+"&by="+m_user+"&debug="+debug);
 	m_cesku.SetWindowText("");
@@ -311,7 +312,7 @@ void CDlldemoDlg::OnMenuUploadAddress()
 {
 	
 	m_pUploadAddressDlg = new CUploadAddressDlg();
-	//m_pLogindlg->SetParentDlg(this);
+	m_pUploadAddressDlg->setParentDlg(this);
 	m_pUploadAddressDlg->setDB(db);
 	m_pUploadAddressDlg->DoModal();
 }

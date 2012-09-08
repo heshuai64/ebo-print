@@ -74,7 +74,7 @@ FONT 9, "宋体"
 BEGIN
     PUSHBUTTON      "开启端口",IDC_BUTTONOPENPORT,13,62,45,20
     CONTROL         "测试",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
-                    163,13,40,10
+                    163,13,32,10
     PUSHBUTTON      "关闭端口",IDC_BUTTONCLOSEPORT,253,62,45,20,WS_DISABLED
     CONTROL         "一切正常",IDC_STATICPRINTSTATUS,"Static",
                     SS_LEFTNOWORDWRAP | SS_CENTERIMAGE | SS_SUNKEN | 
@@ -235,8 +235,8 @@ IDR_MENU1 MENU DISCARDABLE
 BEGIN
     POPUP "订单系统"
     BEGIN
-        MENUITEM "登陆",                        IDM_LOGIN
-        MENUITEM "上传包裹",                    IDM_UPLOAD_ADDRESS
+        MENUITEM "登陆系统",                    IDM_LOGIN
+        MENUITEM "上传已打印包裹",              IDM_UPLOAD_ADDRESS
     END
     POPUP "库存系统"
     BEGIN
