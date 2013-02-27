@@ -15,12 +15,12 @@ ResourceCount=8
 Resource1=IDR_MAINFRAME
 Resource2=IDD_FORMVIEW (English (U.S.))
 Class3=CDlldemoMenu
-Resource3=IDD_SKU_BARCODE
-Resource4=IDD_PROPPAGE_SMALL
+Resource3=IDD_UPLOAD_ADDRESS
+Resource4=IDD_SKU_BARCODE
 Resource5=IDD_OLE_PROPPAGE_SMALL (English (U.S.))
 Class4=CLoginDlg
-Resource6=IDD_DLLDEMO_DIALOG
-Resource7=IDD_UPLOAD_ADDRESS
+Resource6=IDD_PROPPAGE_SMALL
+Resource7=IDD_DLLDEMO_DIALOG
 Class5=CUploadAddressDlg
 Resource8=IDR_MENU1
 
