@@ -12,7 +12,6 @@
 #include "UploadAddressDlg.h"
 #include "dlldemoDlg.h"
 
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -77,6 +76,7 @@ int syncPackedShipment(void* data, int n_columns, char** column_values, char** c
 	}
 	ebos->setParentDlg((CUploadAddressDlg*)data);
 	ebos->syncShipmentPrintStatus(column_values[0], column_values[1], column_values[2]);
+	//Sleep(20000);
 	return 0;
 }
 
